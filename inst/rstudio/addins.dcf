@@ -1,0 +1,4 @@
+Name: SNAhelper
+Description: Analyse your network in a GUI
+Binding: SNAhelperAddin
+Interactive: true
