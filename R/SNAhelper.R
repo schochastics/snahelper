@@ -166,7 +166,7 @@ SNAhelper <- function(text){
                                    miniContentPanel(
                                      scrollable = TRUE,
                                      fillRow(height = heading.height, width = '100%',
-                                             headingOutput('Node Attribute Manager')
+                                             headingOutput('Edge Attribute Manager')
                                      ),
                                      dataTableOutput("attrManageE")#,
                                      # fillRow(height = line.height, width = '100%',
