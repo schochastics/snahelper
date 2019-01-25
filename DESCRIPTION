@@ -1,9 +1,8 @@
 Package: snahelper
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Rstudio Addin for Network Analysis and Visualization
 Version: 0.1.0
 Authors@R: person("David", "Schoch", email = "david@schochastics.net", role = c("aut", "cre"))
-Maintainer: The package maintainer <yourself@somewhere.net>
 Description: More about what it does (maybe more than one line)
     Use four spaces when indenting paragraphs within the Description.
 URL: https://github.com/schochastics/snahelper/issues
