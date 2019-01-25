@@ -16,3 +16,4 @@ layouts.available <- list("smglr" = c("Stress"="smglr::layout_with_stress"),
                                          "lgl"="layout_with_lgl"))
 
 colours.available <- c(colors()[!grepl('grey', colors())])
+fonts.available <- names(pdfFonts())

@@ -154,7 +154,9 @@ SNAhelper <- function(text){
                                                                      selectizeInput('nodeLabelCol',label = 'Colour',
                                                                                     choices = NULL, width = input.width),
                                                                      numericInput('nodeLabelSize', label = 'Size',
-                                                                                  min = 0, max = 10, step = 0.5, value = 6,width=input.width)
+                                                                                  min = 0, max = 10, step = 0.5, value = 6,width=input.width),
+                                                                     selectizeInput('nodeLabelFont',label = 'Font',
+                                                                                    choices = fonts.available, width = input.width)
                                              )
 
                                      )
@@ -532,13 +534,14 @@ SNAhelper <- function(text){
         code_nodes <- paste(code_nodes,nodes_scale_col,nodes_scale_size,sep=" + ")
       }
       #####################
-      #nodes labels----
+      #nodes labels ----
       #####################
       if(input$nodeLabelAttr!="None"){
         code_labels <- paste0("geom_node_text(",
                               "aes(label = ",input$nodeLabelAttr,")",
                               ", colour = \"",input$nodeLabelCol,"\"",
                               ", size = ",input$nodeLabelSize,
+                              ", family = \"",input$nodeLabelFont,"\"",
                               ")")
         code_nodes <- paste(code_nodes,code_labels,sep=" + ")
       }
