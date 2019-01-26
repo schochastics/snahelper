@@ -380,19 +380,36 @@ SNAhelper <- function(text){
     #####################
     #tweak layout ----
     #####################
+    shiny::observeEvent(input$nodeId,{
+      idN <- as.numeric(input$nodeId)
+      xmin <- rv$xy[idN,1]-3
+      xmax <- rv$xy[idN,1]+3
+      xsel <- rv$xy[idN,1]
+      updateNumericInput(session = session,'nudgeX','moveX', value = xsel,
+                         min = xmin,max = xmax,step = 0.01)
+
+      ymin <- rv$xy[idN,2]-3
+      ymax <- rv$xy[idN,2]+3
+      ysel <- rv$xy[idN,2]
+      updateNumericInput(session = session,'nudgeY','moveY', value = ysel,
+                         min = ymin,max = ymax,step = 0.01)
+    })
+
     shiny::observeEvent(input$nudgeX,{
       indX <- as.numeric(input$nodeId)
-      x <- rv$xy[indX,1]
-      x <- x+input$nudgeX
-      rv$xy[indX,1] <- x
+      # x <- rv$xy[indX,1]
+      # x <- x+input$nudgeX
+      # rv$xy[indX,1] <- x
+      rv$xy[indX,1] <- input$nudgeX
       gg_reactive()
 
     })
     shiny::observeEvent(input$nudgeY,{
       indX <- as.numeric(input$nodeId)
-      x <- rv$xy[indX,2]
-      x <- x+input$nudgeY
-      rv$xy[indX,2] <- x
+      # x <- rv$xy[indX,2]
+      # x <- x+input$nudgeY
+      # rv$xy[indX,2] <- x
+      rv$xy[indX,2] <- input$nudgeY
       gg_reactive()
 
     })
