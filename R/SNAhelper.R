@@ -156,7 +156,8 @@ SNAhelper <- function(text){
                                                                      numericInput('nodeLabelSize', label = 'Size',
                                                                                   min = 0, max = 10, step = 0.5, value = 6,width=input.width),
                                                                      selectizeInput('nodeLabelFont',label = 'Font',
-                                                                                    choices = fonts.available, width = input.width)
+                                                                                    choices = fonts.available, width = input.width),
+                                                                     shiny::checkboxInput('nodeLabelRepel',label = 'Repel Labels?',value = FALSE)
                                              )
 
                                      )
@@ -470,7 +471,14 @@ SNAhelper <- function(text){
       validate(
         need(is.validColour(input$nodeColMan), ''),
         need(is.validColour(input$edgeColMan), ''),
-        need(is.validColour(input$nodeBorderColMan), '')
+        need(is.validColour(input$nodeBorderColMan), ''),
+        # need(is.validColour(input$nodeColAttr), ''),
+        # need(is.validColour(input$nodeColAttrL), ''),
+        # need(is.validColour(input$nodeColAttrH), ''),
+        # need(is.validColour(input$edgeColAttr), ''),
+        # need(is.validColour(input$edgeColAttrL), ''),
+        # need(is.validColour(input$edgeColAttrH), ''),
+        need(is.validColour(input$edgeColMan), '')
       )
       #####################
       #layout ----
@@ -560,6 +568,10 @@ SNAhelper <- function(text){
                               ", size = ",input$nodeLabelSize,
                               ", family = \"",input$nodeLabelFont,"\"",
                               ")")
+        if(input$nodeLabelRepel){
+          insert <- paste0(", repel = ",input$nodeLabelRepel, ",segment.alpha=0)")
+          code_labels <- gsub("\\)$",insert,code_labels)
+        }
         code_nodes <- paste(code_nodes,code_labels,sep=" + ")
       }
       #####################
