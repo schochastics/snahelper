@@ -200,8 +200,8 @@ SNAhelper <- function(text){
                                                             width = input.width),
                                              numericInput('edgeSizeMan', label = 'Width',
                                                           min = 0, max = 10, step = 0.1, value = 0.8,width=input.width),
-                                             numericInput('edgeCurveMan', label = 'Curvature',
-                                                          min = 0, max = 1, step = 0.01, value = 0.0,width=input.width)
+                                             numericInput('edgeAlphaMan', label = 'Alpha',
+                                                          min = 0, max = 1, step = 0.01, value = 1.0,width=input.width)
                                      ),
                                      fillRow(height = heading.height, width = '100%',
                                              headingOutput('Attribute')
@@ -274,7 +274,7 @@ SNAhelper <- function(text){
     #initialize selectors ----
     #####################
     updateSelectizeInput(session = session, inputId = 'nodeColMan',
-                         choices = colour.choices, selected = "gray53", server = TRUE,
+                         choices = colour.choices, selected = "gray26", server = TRUE,
                          options = list(create = TRUE, labelField = 'name',
                                         searchField = 'colour', valueField = 'colour',
                                         render = jsColourSelector))
@@ -303,13 +303,13 @@ SNAhelper <- function(text){
                          options = list(create = TRUE))
 
     updateSelectizeInput(session = session, inputId = 'nodeColAttrL',
-                         choices = colour.choices, selected = "dodgerblue", server = TRUE,
+                         choices = colour.choices, selected = "skyblue1", server = TRUE,
                          options = list(create = TRUE, labelField = 'name',
                                         searchField = 'colour', valueField = 'colour',
                                         render = jsColourSelector))
 
     updateSelectizeInput(session = session, inputId = 'nodeColAttrH',
-                         choices = colour.choices, selected = "dodgerblue4", server = TRUE,
+                         choices = colour.choices, selected = "royalblue4", server = TRUE,
                          options = list(create = TRUE, labelField = 'name',
                                         searchField = 'colour', valueField = 'colour',
                                         render = jsColourSelector))
@@ -321,7 +321,7 @@ SNAhelper <- function(text){
                                         render = jsColourSelector))
 
     updateSelectizeInput(session = session, inputId = 'edgeColMan',
-                         choices = colour.choices, selected = "gray26", server = TRUE,
+                         choices = colour.choices, selected = "gray66", server = TRUE,
                          options = list(create = TRUE, labelField = 'name',
                                         searchField = 'colour', valueField = 'colour',
                                         render = jsColourSelector))
@@ -339,13 +339,13 @@ SNAhelper <- function(text){
                          options = list(create = TRUE))
 
     updateSelectizeInput(session = session, inputId = 'edgeColAttrL',
-                         choices = colour.choices, selected = "dodgerblue", server = TRUE,
+                         choices = colour.choices, selected = "skyblue1", server = TRUE,
                          options = list(create = TRUE, labelField = 'name',
                                         searchField = 'colour', valueField = 'colour',
                                         render = jsColourSelector))
 
     updateSelectizeInput(session = session, inputId = 'edgeColAttrH',
-                         choices = colour.choices, selected = "dodgerblue4", server = TRUE,
+                         choices = colour.choices, selected = "royalblue4", server = TRUE,
                          options = list(create = TRUE, labelField = 'name',
                                         searchField = 'colour', valueField = 'colour',
                                         render = jsColourSelector))
@@ -578,10 +578,10 @@ SNAhelper <- function(text){
       #edges ----
       #####################
       if(input$edgeColAttr=="None" & input$edgeSizeAttr=="None" & input$edgeAlphaAttr=="None"){
-        code_edges <- paste0("geom_edge_arc(",
+        code_edges <- paste0("geom_edge_fan(",
                              "edge_colour = \"",input$edgeColMan,"\"",
                              ",edge_width = ",input$edgeSizeMan,
-                             ",curvature = ",input$edgeCurveMan,")")
+                             ",edge_alpha = ",input$edgeAlphaMan,")")
         if(is.directed(g)){
           arrow_code <- paste0(",\narrow = arrow(angle = 30, length = unit(0.15, \"inches\")",
                                ",\nends = \"last\", type = \"closed\")",
@@ -590,10 +590,10 @@ SNAhelper <- function(text){
         }
 
       } else if(input$edgeColAttr!="None" & input$edgeSizeAttr=="None" & input$edgeAlphaAttr=="None"){
-        code_edges <- paste0("geom_edge_arc(",
+        code_edges <- paste0("geom_edge_fan(",
                              "aes(colour = ",input$edgeColAttr,")",
                              ",edge_width = ",input$edgeSizeMan,
-                             ",\ncurvature = ",input$edgeCurveMan,")")
+                             ",edge_alpha = ",input$edgeAlphaMan,")")
         if(is.directed(g)){
           arrow_code <- paste0(",\narrow = arrow(angle = 30, length = unit(0.15, \"inches\")",
                                ",\nends = \"last\", type = \"closed\")",
@@ -605,10 +605,10 @@ SNAhelper <- function(text){
         code_edges <- paste(code_edges,edge_scale_col,sep=" + ")
 
       } else if(input$edgeColAttr=="None" & input$edgeSizeAttr!="None" & input$edgeAlphaAttr=="None"){
-        code_edges <- paste0("geom_edge_arc(",
+        code_edges <- paste0("geom_edge_fan(",
                              "aes(width = ",input$edgeSizeAttr,")",
                              ",\nedge_colour = \"",input$edgeColMan,"\"",
-                             ",\ncurvature = ",input$edgeCurveMan,")")
+                             ",edge_alpha = ",input$edgeAlphaMan,")")
         if(is.directed(g)){
           arrow_code <- paste0(",\narrow = arrow(angle = 30, length = unit(0.15, \"inches\")",
                                ",\nends = \"last\", type = \"closed\")",
@@ -620,11 +620,10 @@ SNAhelper <- function(text){
         code_edges <- paste(code_edges,edge_scale_size,sep=" + ")
 
       } else if(input$edgeColAttr=="None" & input$edgeSizeAttr=="None" & input$edgeAlphaAttr!="None"){
-        code_edges <- paste0("geom_edge_arc(",
+        code_edges <- paste0("geom_edge_fan(",
                              "aes(alpha = ",input$edgeAlphaAttr,")",
                              ",\nedge_colour = \"",input$edgeColMan,"\"",
-                             ",\nedge_width = ",input$edgeSizeMan,
-                             ",\ncurvature = ",input$edgeCurveMan,")")
+                             ",\nedge_width = ",input$edgeSizeMan,")")
         if(is.directed(g)){
           arrow_code <- paste0(",\narrow = arrow(angle = 30, length = unit(0.15, \"inches\")",
                                ",\nends = \"last\", type = \"closed\")",
@@ -636,10 +635,10 @@ SNAhelper <- function(text){
         code_edges <- paste(code_edges,edge_scale_alpha,sep=" + ")
 
       } else if(input$edgeColAttr!="None" & input$edgeSizeAttr!="None" & input$edgeAlphaAttr=="None"){
-        code_edges <- paste0("geom_edge_arc(",
+        code_edges <- paste0("geom_edge_fan(",
                              "aes(width = ",input$edgeSizeAttr,
                              ",\ncolour = ",input$edgeColAttr,")",
-                             ",\ncurvature = ",input$edgeCurveMan,")")
+                             ",edge_alpha = ",input$edgeAlphaMan,")")
         if(is.directed(g)){
           arrow_code <- paste0(",\narrow = arrow(angle = 30, length = unit(0.15, \"inches\")",
                                ",\nends = \"last\", type = \"closed\")",
@@ -654,11 +653,10 @@ SNAhelper <- function(text){
         code_edges <- paste(code_edges,edge_scale_col,edge_scale_size,sep=" + ")
 
       } else if(input$edgeColAttr!="None" & input$edgeSizeAttr=="None" & input$edgeAlphaAttr!="None"){
-        code_edges <- paste0("geom_edge_arc(",
+        code_edges <- paste0("geom_edge_fan(",
                              "aes(alpha = ",input$edgeAlphaAttr,
                              ",colour = ",input$edgeColAttr,")",
-                             ",\nedge_width = ",input$edgeSizeMan,
-                             ",\ncurvature = ",input$edgeCurveMan,")")
+                             ",\nedge_width = ",input$edgeSizeMan,")")
         if(is.directed(g)){
           arrow_code <- paste0(",\narrow = arrow(angle = 30, length = unit(0.15, \"inches\")",
                                ",\nends = \"last\", type = \"closed\")",
@@ -673,11 +671,10 @@ SNAhelper <- function(text){
         code_edges <- paste(code_edges,edge_scale_col,edge_scale_alpha,sep=" + ")
 
       } else if(input$edgeColAttr=="None" & input$edgeSizeAttr!="None" & input$edgeAlphaAttr!="None"){
-        code_edges <- paste0("geom_edge_arc(",
+        code_edges <- paste0("geom_edge_fan(",
                              "aes(alpha = ",input$edgeAlphaAttr,
                              ",width = ",input$edgeSizeAttr,")",
-                             ",\nedge_colour = \"", input$edgeColMan,"\"",
-                             ",\ncurvature = ",input$edgeCurveMan,")")
+                             ",\nedge_colour = \"", input$edgeColMan,"\"",")")
         if(is.directed(g)){
           arrow_code <- paste0(",\narrow = arrow(angle = 30, length = unit(0.15, \"inches\")",
                                ",\nends = \"last\", type = \"closed\")",
@@ -692,11 +689,10 @@ SNAhelper <- function(text){
         code_edges <- paste(code_edges,edge_scale_size,edge_scale_alpha,sep=" + ")
 
       } else if(input$edgeColAttr!="None" & input$edgeSizeAttr!="None" & input$edgeAlphaAttr!="None"){
-        code_edges <- paste0("geom_edge_arc(",
+        code_edges <- paste0("geom_edge_fan(",
                              "aes(alpha = ",input$edgeAlphaAttr,
                              ",width = ",input$edgeSizeAttr,
-                             ",\ncolour = ",input$edgeColAttr,")",
-                             ",\ncurvature = ",input$edgeCurveMan,")")
+                             ",\ncolour = ",input$edgeColAttr,")",")")
         if(is.directed(g)){
           arrow_code <- paste0(",\narrow = arrow(angle = 30, length = unit(0.15, \"inches\")",
                                ",\nends = \"last\", type = \"closed\")",
@@ -724,7 +720,7 @@ SNAhelper <- function(text){
 ################
       code <- paste(code_layout,code_edges,code_nodes,code_theme,sep=" + ")
       if(input$showLabs){
-        code <- paste0(code,"+ geom_node_text(label = 1:vcount(rv$g))")
+        code <- paste0(code,"+ geom_node_text(label = 1:vcount(rv$g),colour=\"white\")")
       }
       # p <- eval(parse(text = code))
       p <- code

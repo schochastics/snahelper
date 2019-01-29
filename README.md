@@ -71,10 +71,12 @@ edge attributes.
 
 You can style your edges here. `snahelper` automatically detects if your
 network is directed and adds arrows if the network is directed. The
-other options are similar to the nodes tab. The curvature option allows
-you to bend edges. I highly suggest, that you only bend your edges if
-there are two edges running between the same set of nodes to make them
-visible. If you do not have reciprocal edges, then just leave it at 0.
+other options are similar to the nodes tab. ~~The curvature option
+allows you to bend edges. I highly suggest, that you only bend your
+edges if there are two edges running between the same set of nodes to
+make them visible. If you do not have reciprocal edges, then just leave
+it at 0.~~ Edges are now drawn with `geom_edge_fan` to automatically
+bend reciprocal edges and leave other edges straight.
 
 ![](figures/edges.png)
 
