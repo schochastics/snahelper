@@ -40,6 +40,32 @@ In order to use the Addin, simply highlight a network in your script and select
 
 ![](figures/snahelper.gif)
 
+Below is the code to produce the starwars network used in the gif
+```{r starwars,eval=F}
+library(tidyverse)
+library(igraph)
+url <- "https://raw.githubusercontent.com/evelinag/StarWars-social-network/master/networks/starwars-full-interactions-allCharacters.json"
+df <- jsonlite::fromJSON(url)
+
+df$nodes$id <- 1:nrow(df$nodes)
+df$nodes$display <- df$nodes$name
+df$nodes$name <- df$nodes$id-1
+g <- graph_from_data_frame(df$links,directed = F,vertices = df$nodes)
+
+V(g)$name <- V(g)$display
+
+g <- remove.vertex.attribute(g,"id")
+g <- remove.vertex.attribute(g,"display")
+g <- delete.vertices(g,which(degree(g)==0))
+
+V(g)$display <- ifelse(V(g)$value>75,V(g)$name,"")
+V(g)$colour <- ifelse(V(g)$display=="",NA,V(g)$display)
+
+g
+
+```
+
+
 ## Interface
 
 ### Layout
