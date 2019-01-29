@@ -108,7 +108,7 @@ SNAhelper <- function(text){
                                              selectizeInput('nodeColMan', label = 'Colour', choices = NULL,
                                                             width = input.width),
                                              numericInput('nodeSizeMan', label = 'Size',
-                                                          min = 0, max = 10, step = 0.5, value = 5,width = input.width),
+                                                          min = 0, max = 20, step = 0.5, value = 5,width = input.width),
                                              selectizeInput('nodeBorderColMan', label = 'Border Colour',
                                                             choices = NULL, width = input.width),
                                              numericInput('nodeBorderSizeMan', label = 'Border Size',
@@ -146,15 +146,15 @@ SNAhelper <- function(text){
                                              ),
                                              shiny::conditionalPanel("input.nodeSizeAttr!='None'",
                                                                      numericInput('nodeSizeAttrL', label = 'Min Size',
-                                                                                  min = 0, max = 10, step = 0.5, value = 1,width=input.width),
+                                                                                  min = 0, max = 20, step = 0.5, value = 3,width=input.width),
                                                                      numericInput('nodeSizeAttrH', label = 'Max Size',
-                                                                                  min = 0, max = 10, step = 0.5, value = 6,width=input.width)
+                                                                                  min = 0, max = 20, step = 0.5, value = 8,width=input.width)
                                              ),
                                              shiny::conditionalPanel("input.nodeLabelAttr!='None'",
                                                                      selectizeInput('nodeLabelCol',label = 'Colour',
                                                                                     choices = NULL, width = input.width),
                                                                      numericInput('nodeLabelSize', label = 'Size',
-                                                                                  min = 0, max = 10, step = 0.5, value = 6,width=input.width),
+                                                                                  min = 0, max = 20, step = 0.5, value = 6,width=input.width),
                                                                      selectizeInput('nodeLabelFont',label = 'Font',
                                                                                     choices = fonts.available, width = input.width),
                                                                      shiny::checkboxInput('nodeLabelRepel',label = 'Repel Labels?',value = FALSE)
