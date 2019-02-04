@@ -1,4 +1,4 @@
-headingOutput <- function(heading, height = '20px', css = 'color: #660099; text-decoration: underline;') {
+headingOutput <- function(heading, height = '20px', css = 'color: #FF7F00; text-decoration: underline;') {
 
   fillCol(tags$div(style = css, strong(heading)), height = height)
 
