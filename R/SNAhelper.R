@@ -24,7 +24,11 @@ SNAhelper <- function(text){
 
   if (any(ls(envir = .GlobalEnv) == text)) {
     g <- get(text, envir = .GlobalEnv)
-    rv <- reactiveValues(g=g,xy=smglr::layout_with_stress(g))
+    g_iso <- delete.vertices(g,which(degree(g)==0))
+    xy <- smglr::layout_with_stress(g)
+    rv <- reactiveValues(g=g,xy=xy,
+                         g_iso=g_iso,xy_iso=smglr::layout_with_stress(g_iso),
+                         g_all=g,xy_all=xy)
     if(!igraph::is.igraph(g)){
       stop(paste0(text, 'is not an igraph object'))
     }
@@ -57,7 +61,8 @@ SNAhelper <- function(text){
                                                          width = input.width)
                                      ),
                                      fillRow(height = line.height, width = '100%',
-                                             actionButton("do.layout","Calculate Layout")
+                                             actionButton("do.layout","Calculate Layout"),
+                                             checkboxInput("showIso", label = "Show Isolates", value = TRUE)
                                      ),
                                      fillRow(height = heading.height, width = '100%',
                                              headingOutput('Tweak Layout'),
@@ -207,12 +212,14 @@ SNAhelper <- function(text){
                                              numericInput('edgeSizeMan', label = 'Width',
                                                           min = 0, max = 10, step = 0.1, value = 0.8,width=input.width),
                                              numericInput('edgeAlphaMan', label = 'Alpha',
-                                                          min = 0, max = 1, step = 0.01, value = 1.0,width=input.width)
+                                                          min = 0, max = 1, step = 0.01, value = 1.0,width=input.width),
+                                             numericInput('edgeNMan', label = 'Pts. per Edge',
+                                                          min = 2, max = 100, step = 1, value = 2,width=input.width)
                                      ),
                                      fillRow(height = heading.height, width = '100%',
                                              headingOutput('Attribute')
                                      ),
-                                     fillRow(height = line.height, width = '100%',
+                                     fillRow(height = line.height, width = '75%',
                                              selectizeInput('edgeColAttr', label = 'Colour (Cont.)',
                                                             choices = NULL,
                                                             width = input.width),
@@ -488,6 +495,13 @@ SNAhelper <- function(text){
         # need(is.validColour(input$edgeColAttrH), ''),
         need(is.validColour(input$edgeColMan), '')
       )
+      if(!input$showIso){
+        rv$g <- rv$g_iso
+        rv$xy <- rv$xy_iso
+      } else{
+        rv$g <- rv$g_all
+        rv$xy <- rv$xy_all
+      }
       #####################
       #layout ----
       #####################
@@ -589,7 +603,8 @@ SNAhelper <- function(text){
         code_edges <- paste0("geom_edge_fan(",
                              "edge_colour = \"",input$edgeColMan,"\"",
                              ",edge_width = ",input$edgeSizeMan,
-                             ",edge_alpha = ",input$edgeAlphaMan,")")
+                             ",edge_alpha = ",input$edgeAlphaMan,
+                             ",n = ",input$edgeNMan,")")
         if(is.directed(g)){
           arrow_code <- paste0(",\narrow = arrow(angle = 30, length = unit(0.15, \"inches\")",
                                ",\nends = \"last\", type = \"closed\")",
@@ -601,7 +616,8 @@ SNAhelper <- function(text){
         code_edges <- paste0("geom_edge_fan(",
                              "aes(colour = ",input$edgeColAttr,")",
                              ",edge_width = ",input$edgeSizeMan,
-                             ",edge_alpha = ",input$edgeAlphaMan,")")
+                             ",edge_alpha = ",input$edgeAlphaMan,
+                             ",n = ",input$edgeNMan,")")
         if(is.directed(g)){
           arrow_code <- paste0(",\narrow = arrow(angle = 30, length = unit(0.15, \"inches\")",
                                ",\nends = \"last\", type = \"closed\")",
@@ -616,7 +632,8 @@ SNAhelper <- function(text){
         code_edges <- paste0("geom_edge_fan(",
                              "aes(width = ",input$edgeSizeAttr,")",
                              ",\nedge_colour = \"",input$edgeColMan,"\"",
-                             ",edge_alpha = ",input$edgeAlphaMan,")")
+                             ",edge_alpha = ",input$edgeAlphaMan,
+                             ",n = ",input$edgeNMan,")")
         if(is.directed(g)){
           arrow_code <- paste0(",\narrow = arrow(angle = 30, length = unit(0.15, \"inches\")",
                                ",\nends = \"last\", type = \"closed\")",
@@ -631,7 +648,8 @@ SNAhelper <- function(text){
         code_edges <- paste0("geom_edge_fan(",
                              "aes(alpha = ",input$edgeAlphaAttr,")",
                              ",\nedge_colour = \"",input$edgeColMan,"\"",
-                             ",\nedge_width = ",input$edgeSizeMan,")")
+                             ",\nedge_width = ",input$edgeSizeMan,
+                             ",n = ",input$edgeNMan,")")
         if(is.directed(g)){
           arrow_code <- paste0(",\narrow = arrow(angle = 30, length = unit(0.15, \"inches\")",
                                ",\nends = \"last\", type = \"closed\")",
@@ -646,7 +664,8 @@ SNAhelper <- function(text){
         code_edges <- paste0("geom_edge_fan(",
                              "aes(width = ",input$edgeSizeAttr,
                              ",\ncolour = ",input$edgeColAttr,")",
-                             ",edge_alpha = ",input$edgeAlphaMan,")")
+                             ",edge_alpha = ",input$edgeAlphaMan,
+                             ",n = ",input$edgeNMan,")")
         if(is.directed(g)){
           arrow_code <- paste0(",\narrow = arrow(angle = 30, length = unit(0.15, \"inches\")",
                                ",\nends = \"last\", type = \"closed\")",
@@ -664,7 +683,8 @@ SNAhelper <- function(text){
         code_edges <- paste0("geom_edge_fan(",
                              "aes(alpha = ",input$edgeAlphaAttr,
                              ",colour = ",input$edgeColAttr,")",
-                             ",\nedge_width = ",input$edgeSizeMan,")")
+                             ",\nedge_width = ",input$edgeSizeMan,
+                             ",n = ",input$edgeNMan,")")
         if(is.directed(g)){
           arrow_code <- paste0(",\narrow = arrow(angle = 30, length = unit(0.15, \"inches\")",
                                ",\nends = \"last\", type = \"closed\")",
@@ -682,7 +702,8 @@ SNAhelper <- function(text){
         code_edges <- paste0("geom_edge_fan(",
                              "aes(alpha = ",input$edgeAlphaAttr,
                              ",width = ",input$edgeSizeAttr,")",
-                             ",\nedge_colour = \"", input$edgeColMan,"\"",")")
+                             ",\nedge_colour = \"", input$edgeColMan,"\"",
+                             ",n = ",input$edgeNMan,")")
         if(is.directed(g)){
           arrow_code <- paste0(",\narrow = arrow(angle = 30, length = unit(0.15, \"inches\")",
                                ",\nends = \"last\", type = \"closed\")",
@@ -700,7 +721,8 @@ SNAhelper <- function(text){
         code_edges <- paste0("geom_edge_fan(",
                              "aes(alpha = ",input$edgeAlphaAttr,
                              ",width = ",input$edgeSizeAttr,
-                             ",\ncolour = ",input$edgeColAttr,")",")")
+                             ",\ncolour = ",input$edgeColAttr,")",
+                             ",n = ",input$edgeNMan,")")
         if(is.directed(g)){
           arrow_code <- paste0(",\narrow = arrow(angle = 30, length = unit(0.15, \"inches\")",
                                ",\nends = \"last\", type = \"closed\")",

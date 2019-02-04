@@ -3,7 +3,8 @@
 
 # snahelper
 
-`snahelper` is an Rstudio Addin to analyse and visualize networks.
+`snahelper` is an Rstudio Addin to analyse and visualize networks. (*All
+screenshots are from an older version of the tool*)
 
 ![](figures/example.png)
 
@@ -101,7 +102,10 @@ allows you to bend edges. I highly suggest, that you only bend your
 edges if there are two edges running between the same set of nodes to
 make them visible. If you do not have reciprocal edges, then just leave
 it at 0.~~ Edges are now drawn with `geom_edge_fan` to automatically
-bend reciprocal edges and leave other edges straight.
+bend reciprocal edges and leave other edges straight. The `Pts. per
+Edge` input controls the number of points drawn along the edge. In most
+use cases this should simply be 2. The value should be increased though
+in the presence of reciprocal directed edges.
 
 ![](figures/edges.png)
 
