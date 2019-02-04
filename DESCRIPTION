@@ -17,7 +17,8 @@ Imports: ggraph,
     ggplot2,
     shiny,
     smglr,
-    DT
+    DT,
+    colourpicker
 Remotes:
     schochastics/smglr
 Depends:

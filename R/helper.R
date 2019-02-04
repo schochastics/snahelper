@@ -4,16 +4,16 @@ headingOutput <- function(heading, height = '20px', css = 'color: #FF7F00; text-
 
 }
 
-colours2HEX <- function(colours, Inherit = FALSE) {
-  rgbcolours <- matrix(as.character(as.character.hexmode(col2rgb(colours), width = 2)), nrow = 3)
-  rgbcolours <- apply(rgbcolours, 2, paste, collapse = '')
-  rgbcolours <- paste('#', rgbcolours, sep = '')
-  rgbcolours <- data.frame(name = colours, colour = colours, rgb = rgbcolours, stringsAsFactors = FALSE)
-  if (Inherit) {
-    rgbcolours <- rbind(data.frame(name = 'Inherit', colour = 'NULL', rgb = '#ffffff'), rgbcolours)
-  }
-  return(rgbcolours)
-}
+# colours2HEX <- function(colours, Inherit = FALSE) {
+#   rgbcolours <- matrix(as.character(as.character.hexmode(col2rgb(colours), width = 2)), nrow = 3)
+#   rgbcolours <- apply(rgbcolours, 2, paste, collapse = '')
+#   rgbcolours <- paste('#', rgbcolours, sep = '')
+#   rgbcolours <- data.frame(name = colours, colour = colours, rgb = rgbcolours, stringsAsFactors = FALSE)
+#   if (Inherit) {
+#     rgbcolours <- rbind(data.frame(name = 'Inherit', colour = 'NULL', rgb = '#ffffff'), rgbcolours)
+#   }
+#   return(rgbcolours)
+# }
 
 is.validColour <- function(x) {
   if (is.null(x)) {

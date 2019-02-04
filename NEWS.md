@@ -5,6 +5,7 @@
 * switched from `geom_edge_arc` to `geom_edge_fan`
 * changed some default colors
 * increased max node size
+* added `colourpicker` support
 
 # snahelper 0.1.0
 

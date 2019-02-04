@@ -11,6 +11,7 @@
 #' @import ggraph
 #' @import rstudioapi
 #' @import igraph
+#' @import colourpicker
 #' @importFrom grDevices col2rgb
 #' @importFrom grDevices colors
 #' @name SNAhelper
@@ -36,6 +37,7 @@ SNAhelper <- function(text){
     tags$script(jscodeWidth),
     tags$script(jscodeHeight),
     tags$style(type = "text/css", ".selectize-dropdown{ width: 200px !important; }"),
+    tags$style(type = "text/css",".form-group.shiny-input-container{width:50%;}"),
 
     gadgetTitleBar("SNA helper"),
     miniTabstripPanel(selected = 'layout',
@@ -105,12 +107,12 @@ SNAhelper <- function(text){
                                              headingOutput('Manual')
                                      ),
                                      fillRow(height = line.height, width = '100%',
-                                             selectizeInput('nodeColMan', label = 'Colour', choices = NULL,
-                                                            width = input.width),
+                                             # selectizeInput('nodeColMan', label = 'Colour', choices = NULL,
+                                             #                width = input.width),
+                                             colourpicker::colourInput('nodeColMan',label="Colour",value = "gray32"),
                                              numericInput('nodeSizeMan', label = 'Size',
                                                           min = 0, max = 20, step = 0.5, value = 5,width = input.width),
-                                             selectizeInput('nodeBorderColMan', label = 'Border Colour',
-                                                            choices = NULL, width = input.width),
+                                             colourpicker::colourInput('nodeBorderColMan',label="Border Colour",value = "black"),
                                              numericInput('nodeBorderSizeMan', label = 'Border Size',
                                                           min = 0, max = 2, step = 0.1, value = 0.3,width=input.width)
                                      ),
@@ -133,10 +135,12 @@ SNAhelper <- function(text){
                                      ),
                                      fillRow(height=line.height,width='100%',
                                              shiny::conditionalPanel("input.nodeColAttr!='None'",
-                                                                     selectizeInput('nodeColAttrL',label = 'Min Colour',
-                                                                                    choices = NULL, width = input.width),
-                                                                     selectizeInput('nodeColAttrH',label = 'Max Colour',
-                                                                                    choices = NULL, width = input.width)
+                                                                     colourpicker::colourInput('nodeColAttrL',label="Min Colour",value = "skyblue1"),
+                                                                     colourpicker::colourInput('nodeColAttrH',label="Max Colour",value = "royalblue4")
+                                                                     # selectizeInput('nodeColAttrL',label = 'Min Colour',
+                                                                     #                choices = NULL, width = input.width),
+                                                                     # selectizeInput('nodeColAttrH',label = 'Max Colour',
+                                                                     #                choices = NULL, width = input.width)
                                              ),
                                              shiny::conditionalPanel("input.nodeColAttrD!='None'",
                                                                      selectizeInput('nodeColAttrP',label = 'Palette',
@@ -151,8 +155,9 @@ SNAhelper <- function(text){
                                                                                   min = 0, max = 20, step = 0.5, value = 8,width=input.width)
                                              ),
                                              shiny::conditionalPanel("input.nodeLabelAttr!='None'",
-                                                                     selectizeInput('nodeLabelCol',label = 'Colour',
-                                                                                    choices = NULL, width = input.width),
+                                                                     colourpicker::colourInput('nodeLabelCol',label="Colour",value = "black"),
+                                                                     # selectizeInput('nodeLabelCol',label = 'Colour',
+                                                                     #                choices = NULL, width = input.width),
                                                                      numericInput('nodeLabelSize', label = 'Size',
                                                                                   min = 0, max = 20, step = 0.5, value = 6,width=input.width),
                                                                      selectizeInput('nodeLabelFont',label = 'Font',
@@ -196,8 +201,9 @@ SNAhelper <- function(text){
                                              headingOutput('Manual')
                                      ),
                                      fillRow(height = line.height, width = '100%',
-                                             selectizeInput('edgeColMan', label = 'Colour', choices = NULL,
-                                                            width = input.width),
+                                             colourpicker::colourInput('edgeColMan',label="Colour",value = "gray66"),
+                                             # selectizeInput('edgeColMan', label = 'Colour', choices = NULL,
+                                             #                width = input.width),
                                              numericInput('edgeSizeMan', label = 'Width',
                                                           min = 0, max = 10, step = 0.1, value = 0.8,width=input.width),
                                              numericInput('edgeAlphaMan', label = 'Alpha',
@@ -219,10 +225,12 @@ SNAhelper <- function(text){
                                      ),
                                      fillRow(height=line.height,width='100%',
                                              shiny::conditionalPanel("input.edgeColAttr!='None'",
-                                                                     selectizeInput('edgeColAttrL',label = 'Min Colour',
-                                                                                    choices = NULL, width = input.width),
-                                                                     selectizeInput('edgeColAttrH',label = 'Max Colour',
-                                                                                    choices = NULL, width = input.width)
+                                                                     colourpicker::colourInput('edgeColAttrL',label="Min Colour",value = "skyblue1"),
+                                                                     colourpicker::colourInput('edgeColAttrH',label="Max Colour",value = "royalblue4")
+                                                                     # selectizeInput('edgeColAttrL',label = 'Min Colour',
+                                                                     #                choices = NULL, width = input.width),
+                                                                     # selectizeInput('edgeColAttrH',label = 'Max Colour',
+                                                                     #                choices = NULL, width = input.width)
                                              ),
                                              shiny::conditionalPanel("input.edgeSizeAttr!='None'",
                                                                      numericInput('edgeSizeAttrL', label = 'Min Width',
@@ -251,7 +259,7 @@ SNAhelper <- function(text){
     #####################
     #constants ----
     #####################
-    colour.choices <- colours2HEX(colours.available)
+    # colour.choices <- colours2HEX(colours.available)
     vattr.to.aes <- igraph::vertex_attr_names(g)[!grepl("name",igraph::vertex_attr_names(g))]
     if(length(vattr.to.aes)>0){
     idC <- which(sapply(vattr.to.aes,function(x) is.numeric(igraph::get.vertex.attribute(g,x))))
@@ -273,17 +281,17 @@ SNAhelper <- function(text){
     #####################
     #initialize selectors ----
     #####################
-    updateSelectizeInput(session = session, inputId = 'nodeColMan',
-                         choices = colour.choices, selected = "gray26", server = TRUE,
-                         options = list(create = TRUE, labelField = 'name',
-                                        searchField = 'colour', valueField = 'colour',
-                                        render = jsColourSelector))
+    # updateSelectizeInput(session = session, inputId = 'nodeColMan',
+    #                      choices = colour.choices, selected = "gray26", server = TRUE,
+    #                      options = list(create = TRUE, labelField = 'name',
+    #                                     searchField = 'colour', valueField = 'colour',
+    #                                     render = jsColourSelector))
 
-    updateSelectizeInput(session = session, inputId = 'nodeBorderColMan',
-                         choices = colour.choices, selected = "black", server = TRUE,
-                         options = list(create = TRUE, labelField = 'name',
-                                        searchField = 'colour', valueField = 'colour',
-                                        render = jsColourSelector))
+    # updateSelectizeInput(session = session, inputId = 'nodeBorderColMan',
+    #                      choices = colour.choices, selected = "black", server = TRUE,
+    #                      options = list(create = TRUE, labelField = 'name',
+    #                                     searchField = 'colour', valueField = 'colour',
+    #                                     render = jsColourSelector))
 
     updateSelectizeInput(session = session, inputId = 'nodeColAttr',
                          choices = vattrC.to.aes, selected = "None", server = TRUE,
@@ -302,29 +310,29 @@ SNAhelper <- function(text){
                          choices = vattrC.to.aes, selected = "None", server = TRUE,
                          options = list(create = TRUE))
 
-    updateSelectizeInput(session = session, inputId = 'nodeColAttrL',
-                         choices = colour.choices, selected = "skyblue1", server = TRUE,
-                         options = list(create = TRUE, labelField = 'name',
-                                        searchField = 'colour', valueField = 'colour',
-                                        render = jsColourSelector))
+    # updateSelectizeInput(session = session, inputId = 'nodeColAttrL',
+    #                      choices = colour.choices, selected = "skyblue1", server = TRUE,
+    #                      options = list(create = TRUE, labelField = 'name',
+    #                                     searchField = 'colour', valueField = 'colour',
+    #                                     render = jsColourSelector))
+    #
+    # updateSelectizeInput(session = session, inputId = 'nodeColAttrH',
+    #                      choices = colour.choices, selected = "royalblue4", server = TRUE,
+    #                      options = list(create = TRUE, labelField = 'name',
+    #                                     searchField = 'colour', valueField = 'colour',
+    #                                     render = jsColourSelector))
 
-    updateSelectizeInput(session = session, inputId = 'nodeColAttrH',
-                         choices = colour.choices, selected = "royalblue4", server = TRUE,
-                         options = list(create = TRUE, labelField = 'name',
-                                        searchField = 'colour', valueField = 'colour',
-                                        render = jsColourSelector))
+    # updateSelectizeInput(session = session, inputId = 'nodeLabelCol',
+    #                      choices = colour.choices, selected = "black", server = TRUE,
+    #                      options = list(create = TRUE, labelField = 'name',
+    #                                     searchField = 'colour', valueField = 'colour',
+    #                                     render = jsColourSelector))
 
-    updateSelectizeInput(session = session, inputId = 'nodeLabelCol',
-                         choices = colour.choices, selected = "black", server = TRUE,
-                         options = list(create = TRUE, labelField = 'name',
-                                        searchField = 'colour', valueField = 'colour',
-                                        render = jsColourSelector))
-
-    updateSelectizeInput(session = session, inputId = 'edgeColMan',
-                         choices = colour.choices, selected = "gray66", server = TRUE,
-                         options = list(create = TRUE, labelField = 'name',
-                                        searchField = 'colour', valueField = 'colour',
-                                        render = jsColourSelector))
+    # updateSelectizeInput(session = session, inputId = 'edgeColMan',
+    #                      choices = colour.choices, selected = "gray66", server = TRUE,
+    #                      options = list(create = TRUE, labelField = 'name',
+    #                                     searchField = 'colour', valueField = 'colour',
+    #                                     render = jsColourSelector))
 
     updateSelectizeInput(session = session, inputId = 'edgeColAttr',
                          choices = eattrC.to.aes, selected = "None", server = TRUE,
@@ -338,17 +346,17 @@ SNAhelper <- function(text){
                          choices = eattrC.to.aes, selected = "None", server = TRUE,
                          options = list(create = TRUE))
 
-    updateSelectizeInput(session = session, inputId = 'edgeColAttrL',
-                         choices = colour.choices, selected = "skyblue1", server = TRUE,
-                         options = list(create = TRUE, labelField = 'name',
-                                        searchField = 'colour', valueField = 'colour',
-                                        render = jsColourSelector))
-
-    updateSelectizeInput(session = session, inputId = 'edgeColAttrH',
-                         choices = colour.choices, selected = "royalblue4", server = TRUE,
-                         options = list(create = TRUE, labelField = 'name',
-                                        searchField = 'colour', valueField = 'colour',
-                                        render = jsColourSelector))
+    # updateSelectizeInput(session = session, inputId = 'edgeColAttrL',
+    #                      choices = colour.choices, selected = "skyblue1", server = TRUE,
+    #                      options = list(create = TRUE, labelField = 'name',
+    #                                     searchField = 'colour', valueField = 'colour',
+    #                                     render = jsColourSelector))
+    #
+    # updateSelectizeInput(session = session, inputId = 'edgeColAttrH',
+    #                      choices = colour.choices, selected = "royalblue4", server = TRUE,
+    #                      options = list(create = TRUE, labelField = 'name',
+    #                                     searchField = 'colour', valueField = 'colour',
+    #                                     render = jsColourSelector))
 
     #####################
     #be sure either discrete or continuos is selected ----
@@ -561,7 +569,7 @@ SNAhelper <- function(text){
       #####################
       #nodes labels ----
       #####################
-      if(input$nodeLabelAttr!="None"){
+      if(input$nodeLabelAttr!="None" & input$nodeLabelAttr!=""){
         code_labels <- paste0("geom_node_text(",
                               "aes(label = ",input$nodeLabelAttr,")",
                               ", colour = \"",input$nodeLabelCol,"\"",
