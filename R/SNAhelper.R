@@ -230,7 +230,7 @@ SNAhelper <- function(text){
                                                             choices = NULL,
                                                             width = input.width)
                                      ),
-                                     fillRow(height=line.height,width='100%',
+                                     fillRow(height=line.height,width='75%',
                                              shiny::conditionalPanel("input.edgeColAttr!='None'",
                                                                      colourpicker::colourInput('edgeColAttrL',label="Min Colour",value = "skyblue1"),
                                                                      colourpicker::colourInput('edgeColAttrH',label="Max Colour",value = "royalblue4")
