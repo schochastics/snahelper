@@ -88,11 +88,7 @@ SNAhelper <- function(text){
                                      dataTableOutput("attrManageN"),
                                      fillRow(height = line.height, width = '100%',
                                              selectizeInput('centindex', label = 'Index',
-                                                            choices = c("Degree" = "degree(rv$g)",
-                                                                        "Betwenness" = "betweenness(rv$g)",
-                                                                        "Closeness" = "closeness(rv$g)",
-                                                                        "Eigenvector" = "eigen_centrality(rv$g)$vector"
-                                                            ),
+                                                            choices = NULL,
                                                             width = input.width),
                                              selectizeInput('clusteralg', label = 'Clustering',
                                                             choices = c("Louvain" = "cluster_louvain(rv$g)"),
@@ -256,7 +252,15 @@ SNAhelper <- function(text){
                                    )
                       ),
                       miniTabPanel("result", icon = icon('bezier-curve'),
-                                   plotOutput("Graph4", width = '100%', height = '95%'))
+                                   plotOutput("Graph4", width = '100%', height = '95%')),
+                      miniTabPanel("help", icon = icon('question-circle'),
+                                   miniContentPanel(
+                                     scrollable = TRUE,
+                                     fillRow(height = heading.height, width = '100%',
+                                             headingOutput('Help (Comming Soon)')
+                                     )
+                                  )
+                      )
 
     ))
 
@@ -285,6 +289,39 @@ SNAhelper <- function(text){
     } else{
       eattrC.to.aes <- c("None")
     }
+    #####################
+    # check graph properties
+    #####################
+    if(is.directed(g) & !is.weighted(g)){
+      cent_choice <- c("In-Degree" = "degree(rv$g,mode='in')",
+                       "Out-Degree" = "degree(rv$g,mode='out')",
+                       "Degree" = "degree(rv$g,mode='all')",
+                       "Betwenness" = "betweenness(rv$g)",
+                       "Closeness" = "closeness(rv$g)",
+                       "PageRank" = "page_rank(rv$g)$vector")
+    } else if(!is.directed(g) & is.weighted(g)){
+      cent_choice <- c("Degree" = "degree(rv$g)",
+                       "Weighted Degree" = "graph.strength(rv$g)",
+                       "Betwenness" = "betweenness(rv$g)",
+                       "Closeness" = "closeness(rv$g)",
+                       "Eigenvector" = "eigen_centrality(rv$g)$vector")
+    } else if(!is.directed(g) & !is.weighted(g)){
+      cent_choices <- c("Degree" = "degree(rv$g)",
+                        "Betwenness" = "betweenness(rv$g)",
+                        "Closeness" = "closeness(rv$g)",
+                        "Eigenvector" = "eigen_centrality(rv$g)$vector")
+    } else{
+      cent_choice <- c("In-Degree" = "degree(rv$g,mode='in')",
+                       "Out-Degree" = "degree(rv$g,mode='out')",
+                       "Degree" = "degree(rv$g,mode='all')",
+                       "Weighted In-Degree" = "graph.strength(rv$g,mode='in')",
+                       "Weighted Out-Degree" = "graph.strength(rv$g,mode='out')",
+                       "Weighted Degree" = "graph.strength(rv$g,mode='all')",
+                       "Betwenness" = "betweenness(rv$g)",
+                       "Closeness" = "closeness(rv$g)",
+                       "PageRank" = "page_rank(rv$g)$vector")
+    }
+
     #####################
     #initialize selectors ----
     #####################
@@ -364,7 +401,9 @@ SNAhelper <- function(text){
     #                      options = list(create = TRUE, labelField = 'name',
     #                                     searchField = 'colour', valueField = 'colour',
     #                                     render = jsColourSelector))
-
+    updateSelectizeInput(session = session, inputId = 'centindex',
+                         choices = cent_choice, selected = cent_choice[1], server = TRUE,
+                         options = list(create = TRUE))
     #####################
     #be sure either discrete or continuos is selected ----
     #####################
@@ -389,8 +428,51 @@ SNAhelper <- function(text){
     #   gg_reactive()
     # })
     shiny::observeEvent(input$do.layout,{
+      if(input$graph.layout!="smglr::layout_as_backbone"){
       xy <- eval(parse(text = paste0(input$graph.layout,"(rv$g)")))
+      if(!input$showIso){
+        rv$xy_iso <- xy
+      } else{
+        rv$xy_all <- xy
+      }
       rv$xy <- xy
+      } else{
+        xy <- eval(parse(text = paste0(input$graph.layout,"(rv$g)")))
+        if(!input$showIso){
+          rv$xy_iso <- xy$xy
+        } else{
+          rv$xy_all <- xy$xy
+        }
+        if(!input$showIso){
+          bb <- rep(0,ecount(rv$g_iso))
+          bb[xy$backbone] <- 1
+          g <- igraph::set.edge.attribute(graph = rv$g_iso,name = "backbone",value = bb)
+          rv$g_iso <- g
+        } else{
+          bb <- rep(0,ecount(rv$g_all))
+          bb[xy$backbone] <- 1
+          g <- igraph::set.edge.attribute(graph = rv$g_all,name = "backbone",value = bb)
+          rv$g_all <- g
+        }
+        eattr.to.aes <- igraph::edge_attr_names(g)
+        if(length(eattr.to.aes)>0){
+          idC <- which(sapply(eattr.to.aes,function(x) is.numeric(igraph::get.edge.attribute(g,x))))
+          eattrC.to.aes <- c("None",eattr.to.aes[idC])
+        } else{
+          eattrC.to.aes <- c("None")
+        }
+        updateSelectizeInput(session = session, inputId = 'edgeColAttr',
+                             choices = eattrC.to.aes, selected = "None", server = TRUE,
+                             options = list(create = TRUE))
+
+        updateSelectizeInput(session = session, inputId = 'edgeSizeAttr',
+                             choices = eattrC.to.aes, selected = "None", server = TRUE,
+                             options = list(create = TRUE))
+
+        updateSelectizeInput(session = session, inputId = 'edgeAlphaAttr',
+                             choices = eattrC.to.aes, selected = "None", server = TRUE,
+                             options = list(create = TRUE))
+      }
       gg_reactive()
     })
     #####################

@@ -3,7 +3,8 @@ input.width2 <- '90%'
 line.height <- '70px'
 heading.height <- '30px'
 
-layouts.available <- list("smglr" = c("Stress"="smglr::layout_with_stress"),
+layouts.available <- list("smglr" = c("Stress"="smglr::layout_with_stress",
+                                      "Backbone"="smglr::layout_as_backbone"),
                           "igraph" =   c("Circle"="layout_in_circle","Nicely"= "layout_nicely",
                                          "Random"="layout_randomly",
                                          "Fruchterman-Reingold"="layout_with_fr",

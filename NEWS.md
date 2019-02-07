@@ -1,3 +1,9 @@
+# snahelper 0.3.0
+
+* added backbone layout support
+* centrality indices in node attribute manager automatically adapt to type of graph (directed/weighted/etc.)
+* help section added (empty)
+
 # snahelper 0.2.0
 
 * added option to repel node labels
