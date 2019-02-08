@@ -23,15 +23,15 @@ SNAhelper <- function(text){
   }
 
   if (any(ls(envir = .GlobalEnv) == text)) {
+    if(!igraph::is.igraph(g)){
+      stop(paste0(text, 'is not an igraph object'))
+    }
     g <- get(text, envir = .GlobalEnv)
     g_iso <- delete.vertices(g,which(degree(g)==0))
     xy <- smglr::layout_with_stress(g)
     rv <- reactiveValues(g=g,xy=xy,
                          g_iso=g_iso,xy_iso=smglr::layout_with_stress(g_iso),
                          g_all=g,xy_all=xy)
-    if(!igraph::is.igraph(g)){
-      stop(paste0(text, 'is not an igraph object'))
-    }
   } else {
     stop(paste0('Couldn\'t find  the graph ', text, '.'))
   }
@@ -79,11 +79,11 @@ SNAhelper <- function(text){
                                      )
                                    )
                       ),
-                      miniTabPanel("node attribute manager",icon = icon("list-ol"),
+                      miniTabPanel("node attributes",icon = icon("list-ol"),
                                    miniContentPanel(
                                      scrollable = TRUE,
                                      fillRow(height = heading.height, width = '100%',
-                                             headingOutput('Node Attribute Manager')
+                                             headingOutput('Node Attributes')
                                      ),
                                      dataTableOutput("attrManageN"),
                                      fillRow(height = line.height, width = '100%',
@@ -169,11 +169,11 @@ SNAhelper <- function(text){
                                      )
                                    )
                       ),
-                      miniTabPanel("edge attribute manager",icon = icon("list-ol"),
+                      miniTabPanel("edge attributes",icon = icon("list-ol"),
                                    miniContentPanel(
                                      scrollable = TRUE,
                                      fillRow(height = heading.height, width = '100%',
-                                             headingOutput('Edge Attribute Manager')
+                                             headingOutput('Edge Attributes')
                                      ),
                                      dataTableOutput("attrManageE")#,
                                      # fillRow(height = line.height, width = '100%',
@@ -306,7 +306,7 @@ SNAhelper <- function(text){
                        "Closeness" = "closeness(rv$g)",
                        "Eigenvector" = "eigen_centrality(rv$g)$vector")
     } else if(!is.directed(g) & !is.weighted(g)){
-      cent_choices <- c("Degree" = "degree(rv$g)",
+      cent_choice <- c("Degree" = "degree(rv$g)",
                         "Betwenness" = "betweenness(rv$g)",
                         "Closeness" = "closeness(rv$g)",
                         "Eigenvector" = "eigen_centrality(rv$g)$vector")
