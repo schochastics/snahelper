@@ -23,10 +23,10 @@ SNAhelper <- function(text){
   }
 
   if (any(ls(envir = .GlobalEnv) == text)) {
+    g <- get(text, envir = .GlobalEnv)
     if(!igraph::is.igraph(g)){
       stop(paste0(text, 'is not an igraph object'))
     }
-    g <- get(text, envir = .GlobalEnv)
     g_iso <- delete.vertices(g,which(degree(g)==0))
     xy <- smglr::layout_with_stress(g)
     rv <- reactiveValues(g=g,xy=xy,
