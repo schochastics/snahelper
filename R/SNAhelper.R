@@ -27,11 +27,8 @@ SNAhelper <- function(text){
     if(!igraph::is.igraph(g)){
       stop(paste0(text, 'is not an igraph object'))
     }
-    g_iso <- delete.vertices(g,which(degree(g)==0))
     xy <- smglr::layout_with_stress(g)
-    rv <- reactiveValues(g=g,xy=xy,
-                         g_iso=g_iso,xy_iso=smglr::layout_with_stress(g_iso),
-                         g_all=g,xy_all=xy)
+    rv <- reactiveValues(g=g,xy=xy)
   } else {
     stop(paste0('Couldn\'t find  the graph ', text, '.'))
   }
@@ -62,7 +59,8 @@ SNAhelper <- function(text){
                                      ),
                                      fillRow(height = line.height, width = '100%',
                                              actionButton("do.layout","Calculate Layout"),
-                                             checkboxInput("showIso", label = "Show Isolates", value = TRUE)
+                                             actionButton("del.isolate","Delete Isolates")
+                                             # checkboxInput("showIso", label = "Show Isolates", value = TRUE)
                                      ),
                                      fillRow(height = heading.height, width = '100%',
                                              headingOutput('Tweak Layout'),
@@ -108,8 +106,6 @@ SNAhelper <- function(text){
                                              headingOutput('Manual')
                                      ),
                                      fillRow(height = line.height, width = '100%',
-                                             # selectizeInput('nodeColMan', label = 'Colour', choices = NULL,
-                                             #                width = input.width),
                                              colourpicker::colourInput('nodeColMan',label="Colour",value = "gray32"),
                                              numericInput('nodeSizeMan', label = 'Size',
                                                           min = 0, max = 20, step = 0.5, value = 5,width = input.width),
@@ -138,10 +134,7 @@ SNAhelper <- function(text){
                                              shiny::conditionalPanel("input.nodeColAttr!='None'",
                                                                      colourpicker::colourInput('nodeColAttrL',label="Min Colour",value = "skyblue1"),
                                                                      colourpicker::colourInput('nodeColAttrH',label="Max Colour",value = "royalblue4")
-                                                                     # selectizeInput('nodeColAttrL',label = 'Min Colour',
-                                                                     #                choices = NULL, width = input.width),
-                                                                     # selectizeInput('nodeColAttrH',label = 'Max Colour',
-                                                                     #                choices = NULL, width = input.width)
+
                                              ),
                                              shiny::conditionalPanel("input.nodeColAttrD!='None'",
                                                                      selectizeInput('nodeColAttrP',label = 'Palette',
@@ -175,23 +168,7 @@ SNAhelper <- function(text){
                                      fillRow(height = heading.height, width = '100%',
                                              headingOutput('Edge Attributes')
                                      ),
-                                     dataTableOutput("attrManageE")#,
-                                     # fillRow(height = line.height, width = '100%',
-                                     #         selectizeInput('centindex', label = 'Index',
-                                     #                        choices = c("Degree" = "degree(rv$g)",
-                                     #                                    "Betwenness" = "betweenness(rv$g)",
-                                     #                                    "Closeness" = "closeness(rv$g)",
-                                     #                                    "Eigenvector" = "eigen_centrality(rv$g)$vector"
-                                     #                        ),
-                                     #                        width = input.width),
-                                     #         selectizeInput('clusteralg', label = 'Clustering',
-                                     #                        choices = c("Louvain" = "cluster_louvain(rv$g)"),
-                                     #                        width = input.width)
-                                     # ),
-                                     # fillRow(height=line.height, width = '100%',
-                                     #         actionButton("calcIndex","Calculate Index"),
-                                     #         actionButton("calcClust","Calculate Clustering")
-                                     # )
+                                     dataTableOutput("attrManageE")
                                    )
                       ),
                       miniTabPanel("edges", icon = icon('minus'),
@@ -203,8 +180,6 @@ SNAhelper <- function(text){
                                      ),
                                      fillRow(height = line.height, width = '100%',
                                              colourpicker::colourInput('edgeColMan',label="Colour",value = "gray66"),
-                                             # selectizeInput('edgeColMan', label = 'Colour', choices = NULL,
-                                             #                width = input.width),
                                              numericInput('edgeSizeMan', label = 'Width',
                                                           min = 0, max = 10, step = 0.1, value = 0.8,width=input.width),
                                              numericInput('edgeAlphaMan', label = 'Alpha',
@@ -230,10 +205,6 @@ SNAhelper <- function(text){
                                              shiny::conditionalPanel("input.edgeColAttr!='None'",
                                                                      colourpicker::colourInput('edgeColAttrL',label="Min Colour",value = "skyblue1"),
                                                                      colourpicker::colourInput('edgeColAttrH',label="Max Colour",value = "royalblue4")
-                                                                     # selectizeInput('edgeColAttrL',label = 'Min Colour',
-                                                                     #                choices = NULL, width = input.width),
-                                                                     # selectizeInput('edgeColAttrH',label = 'Max Colour',
-                                                                     #                choices = NULL, width = input.width)
                                              ),
                                              shiny::conditionalPanel("input.edgeSizeAttr!='None'",
                                                                      numericInput('edgeSizeAttrL', label = 'Min Width',
@@ -325,18 +296,6 @@ SNAhelper <- function(text){
     #####################
     #initialize selectors ----
     #####################
-    # updateSelectizeInput(session = session, inputId = 'nodeColMan',
-    #                      choices = colour.choices, selected = "gray26", server = TRUE,
-    #                      options = list(create = TRUE, labelField = 'name',
-    #                                     searchField = 'colour', valueField = 'colour',
-    #                                     render = jsColourSelector))
-
-    # updateSelectizeInput(session = session, inputId = 'nodeBorderColMan',
-    #                      choices = colour.choices, selected = "black", server = TRUE,
-    #                      options = list(create = TRUE, labelField = 'name',
-    #                                     searchField = 'colour', valueField = 'colour',
-    #                                     render = jsColourSelector))
-
     updateSelectizeInput(session = session, inputId = 'nodeColAttr',
                          choices = vattrC.to.aes, selected = "None", server = TRUE,
                          options = list(create = TRUE))
@@ -354,29 +313,6 @@ SNAhelper <- function(text){
                          choices = vattrC.to.aes, selected = "None", server = TRUE,
                          options = list(create = TRUE))
 
-    # updateSelectizeInput(session = session, inputId = 'nodeColAttrL',
-    #                      choices = colour.choices, selected = "skyblue1", server = TRUE,
-    #                      options = list(create = TRUE, labelField = 'name',
-    #                                     searchField = 'colour', valueField = 'colour',
-    #                                     render = jsColourSelector))
-    #
-    # updateSelectizeInput(session = session, inputId = 'nodeColAttrH',
-    #                      choices = colour.choices, selected = "royalblue4", server = TRUE,
-    #                      options = list(create = TRUE, labelField = 'name',
-    #                                     searchField = 'colour', valueField = 'colour',
-    #                                     render = jsColourSelector))
-
-    # updateSelectizeInput(session = session, inputId = 'nodeLabelCol',
-    #                      choices = colour.choices, selected = "black", server = TRUE,
-    #                      options = list(create = TRUE, labelField = 'name',
-    #                                     searchField = 'colour', valueField = 'colour',
-    #                                     render = jsColourSelector))
-
-    # updateSelectizeInput(session = session, inputId = 'edgeColMan',
-    #                      choices = colour.choices, selected = "gray66", server = TRUE,
-    #                      options = list(create = TRUE, labelField = 'name',
-    #                                     searchField = 'colour', valueField = 'colour',
-    #                                     render = jsColourSelector))
 
     updateSelectizeInput(session = session, inputId = 'edgeColAttr',
                          choices = eattrC.to.aes, selected = "None", server = TRUE,
@@ -390,17 +326,6 @@ SNAhelper <- function(text){
                          choices = eattrC.to.aes, selected = "None", server = TRUE,
                          options = list(create = TRUE))
 
-    # updateSelectizeInput(session = session, inputId = 'edgeColAttrL',
-    #                      choices = colour.choices, selected = "skyblue1", server = TRUE,
-    #                      options = list(create = TRUE, labelField = 'name',
-    #                                     searchField = 'colour', valueField = 'colour',
-    #                                     render = jsColourSelector))
-    #
-    # updateSelectizeInput(session = session, inputId = 'edgeColAttrH',
-    #                      choices = colour.choices, selected = "royalblue4", server = TRUE,
-    #                      options = list(create = TRUE, labelField = 'name',
-    #                                     searchField = 'colour', valueField = 'colour',
-    #                                     render = jsColourSelector))
     updateSelectizeInput(session = session, inputId = 'centindex',
                          choices = cent_choice, selected = cent_choice[1], server = TRUE,
                          options = list(create = TRUE))
@@ -422,38 +347,30 @@ SNAhelper <- function(text){
     #####################
     #calculate initial layout ----
     #####################
-    # xy <- smglr::layout_with_stress(g)
-    # get_layout <- eventReactive(input$do.layout, {
-    #   xy <- eval(parse(text = paste0(input$graph.layout,"(rv$g)")))
-    #   gg_reactive()
-    # })
+    shiny::observeEvent(input$del.isolate,{
+      idx <- which(degree(rv$g)==0)
+      if(length(idx)>=1){
+        g <- igraph::delete.vertices(rv$g,idx)
+        xy <- rv$xy[-idx,]
+        rv$g <- g
+        rv$xy <- xy
+        gg_reactive()
+      }
+    })
+
     shiny::observeEvent(input$do.layout,{
       if(input$graph.layout!="smglr::layout_as_backbone"){
-      xy <- eval(parse(text = paste0(input$graph.layout,"(rv$g)")))
-      if(!input$showIso){
-        rv$xy_iso <- xy
-      } else{
-        rv$xy_all <- xy
-      }
       rv$xy <- xy
+
       } else{
         xy <- eval(parse(text = paste0(input$graph.layout,"(rv$g)")))
-        if(!input$showIso){
-          rv$xy_iso <- xy$xy
-        } else{
-          rv$xy_all <- xy$xy
-        }
-        if(!input$showIso){
-          bb <- rep(0,ecount(rv$g_iso))
-          bb[xy$backbone] <- 1
-          g <- igraph::set.edge.attribute(graph = rv$g_iso,name = "backbone",value = bb)
-          rv$g_iso <- g
-        } else{
-          bb <- rep(0,ecount(rv$g_all))
-          bb[xy$backbone] <- 1
-          g <- igraph::set.edge.attribute(graph = rv$g_all,name = "backbone",value = bb)
-          rv$g_all <- g
-        }
+        rv$xy <- xy
+
+        bb <- rep(0,ecount(rv$g))
+        bb[xy$backbone] <- 1
+        g <- igraph::set.edge.attribute(graph = rv$g,name = "backbone",value = bb)
+        rv$g_iso <- g
+
         eattr.to.aes <- igraph::edge_attr_names(g)
         if(length(eattr.to.aes)>0){
           idC <- which(sapply(eattr.to.aes,function(x) is.numeric(igraph::get.edge.attribute(g,x))))
@@ -504,9 +421,7 @@ SNAhelper <- function(text){
     })
     shiny::observeEvent(input$nudgeY,{
       indX <- as.numeric(input$nodeId)
-      # x <- rv$xy[indX,2]
-      # x <- x+input$nudgeY
-      # rv$xy[indX,2] <- x
+
       rv$xy[indX,2] <- input$nudgeY
       gg_reactive()
 
@@ -521,6 +436,7 @@ SNAhelper <- function(text){
 
         g <- igraph::set.vertex.attribute(graph = rv$g,name = attr_name,value = ind)
         rv$g <- g
+
         vattr.to.aes <- igraph::vertex_attr_names(rv$g)[!grepl("name",igraph::vertex_attr_names(rv$g))]
         idC <- which(sapply(vattr.to.aes,function(x) is.numeric(igraph::get.vertex.attribute(rv$g,x))))
         vattrC.to.aes <- c("None",vattr.to.aes[idC])
@@ -577,13 +493,7 @@ SNAhelper <- function(text){
         # need(is.validColour(input$edgeColAttrH), ''),
         need(is.validColour(input$edgeColMan), '')
       )
-      if(!input$showIso){
-        rv$g <- rv$g_iso
-        rv$xy <- rv$xy_iso
-      } else{
-        rv$g <- rv$g_all
-        rv$xy <- rv$xy_all
-      }
+
       #####################
       #layout ----
       #####################
