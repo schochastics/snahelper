@@ -2,7 +2,7 @@ Package: snahelper
 Type: Package
 Title: Rstudio Addin for Network Analysis and Visualization
 Version: 0.3.0
-Authors@R: person("David", "Schoch", email = "david@schochastics.net", role = c("aut", "cre"))
+Authors@R: person("David", "Schoch", email = "david.schoch@manchester.ac.uk", role = c("aut", "cre"))
 Description: Rstudio Addin which provides a GUI to visualize and analyse networks. 
     After finishing a session, the code to produce the plot is inserted in the current script.
 URL: https://github.com/schochastics/snahelper/issues
