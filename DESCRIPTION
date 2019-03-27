@@ -16,11 +16,11 @@ Imports: ggraph,
     rstudioapi,
     ggplot2,
     shiny,
-    smglr,
+    graphlayouts,
     DT,
     colourpicker
 Remotes:
-    schochastics/smglr
+    schochastics/graphlayouts
 Depends:
     R (>= 3.0.0)
 RoxygenNote: 6.1.1

@@ -11,15 +11,15 @@
 #' @import ggraph
 #' @import rstudioapi
 #' @import igraph
-#' @import colourpicker
+#' @importFrom colourpicker colourInput
 #' @importFrom grDevices col2rgb
 #' @importFrom grDevices colors
 #' @name SNAhelper
 NULL
 
 SNAhelper <- function(text){
-  if (!requireNamespace("smglr", quietly = TRUE)) {
-    stop("smglr package not found. Install it with devtools::install_github('schochastics/smglr')", call. = FALSE)
+  if (!requireNamespace("graphlayouts", quietly = TRUE)) {
+    stop("graphlayouts package not found. Install it with devtools::install_github('schochastics/graphlayouts')", call. = FALSE)
   }
 
   if (any(ls(envir = .GlobalEnv) == text)) {
@@ -27,7 +27,7 @@ SNAhelper <- function(text){
     if(!igraph::is.igraph(g)){
       stop(paste0(text, 'is not an igraph object'))
     }
-    xy <- smglr::layout_with_stress(g)
+    xy <- graphlayouts::layout_with_stress(g)
     rv <- reactiveValues(g=g,xy=xy)
   } else {
     stop(paste0('Couldn\'t find  the graph ', text, '.'))
@@ -52,7 +52,7 @@ SNAhelper <- function(text){
                                      fillRow(height = line.height, width = '100%',
                                              selectizeInput('graph.layout',label="Layout Algorithm",
                                                             choices=layouts.available,
-                                                            selected="smglr::layout_with_stress",width=input.width),
+                                                            selected="graphlayouts::layout_with_stress",width=input.width),
                                              selectInput('legendPos', label = 'Show Legend',
                                                          choices = c("none","top","bottom","left","right"),
                                                          width = input.width)
@@ -106,10 +106,10 @@ SNAhelper <- function(text){
                                              headingOutput('Manual')
                                      ),
                                      fillRow(height = line.height, width = '100%',
-                                             colourpicker::colourInput('nodeColMan',label="Colour",value = "gray32"),
+                                             colourInput('nodeColMan',label="Colour",value = "gray32"),
                                              numericInput('nodeSizeMan', label = 'Size',
                                                           min = 0, max = 20, step = 0.5, value = 5,width = input.width),
-                                             colourpicker::colourInput('nodeBorderColMan',label="Border Colour",value = "black"),
+                                             colourInput('nodeBorderColMan',label="Border Colour",value = "black"),
                                              numericInput('nodeBorderSizeMan', label = 'Border Size',
                                                           min = 0, max = 2, step = 0.1, value = 0.3,width=input.width)
                                      ),
@@ -132,8 +132,8 @@ SNAhelper <- function(text){
                                      ),
                                      fillRow(height=line.height,width='100%',
                                              shiny::conditionalPanel("input.nodeColAttr!='None'",
-                                                                     colourpicker::colourInput('nodeColAttrL',label="Min Colour",value = "skyblue1"),
-                                                                     colourpicker::colourInput('nodeColAttrH',label="Max Colour",value = "royalblue4")
+                                                                     colourInput('nodeColAttrL',label="Min Colour",value = "skyblue1"),
+                                                                     colourInput('nodeColAttrH',label="Max Colour",value = "royalblue4")
 
                                              ),
                                              shiny::conditionalPanel("input.nodeColAttrD!='None'",
@@ -149,7 +149,7 @@ SNAhelper <- function(text){
                                                                                   min = 0, max = 20, step = 0.5, value = 8,width=input.width)
                                              ),
                                              shiny::conditionalPanel("input.nodeLabelAttr!='None'",
-                                                                     colourpicker::colourInput('nodeLabelCol',label="Colour",value = "black"),
+                                                                     colourInput('nodeLabelCol',label="Colour",value = "black"),
                                                                      # selectizeInput('nodeLabelCol',label = 'Colour',
                                                                      #                choices = NULL, width = input.width),
                                                                      numericInput('nodeLabelSize', label = 'Size',
@@ -179,7 +179,7 @@ SNAhelper <- function(text){
                                              headingOutput('Manual')
                                      ),
                                      fillRow(height = line.height, width = '100%',
-                                             colourpicker::colourInput('edgeColMan',label="Colour",value = "gray66"),
+                                             colourInput('edgeColMan',label="Colour",value = "gray66"),
                                              numericInput('edgeSizeMan', label = 'Width',
                                                           min = 0, max = 10, step = 0.1, value = 0.8,width=input.width),
                                              numericInput('edgeAlphaMan', label = 'Alpha',
@@ -203,8 +203,8 @@ SNAhelper <- function(text){
                                      ),
                                      fillRow(height=line.height,width='75%',
                                              shiny::conditionalPanel("input.edgeColAttr!='None'",
-                                                                     colourpicker::colourInput('edgeColAttrL',label="Min Colour",value = "skyblue1"),
-                                                                     colourpicker::colourInput('edgeColAttrH',label="Max Colour",value = "royalblue4")
+                                                                     colourInput('edgeColAttrL',label="Min Colour",value = "skyblue1"),
+                                                                     colourInput('edgeColAttrH',label="Max Colour",value = "royalblue4")
                                              ),
                                              shiny::conditionalPanel("input.edgeSizeAttr!='None'",
                                                                      numericInput('edgeSizeAttrL', label = 'Min Width',
@@ -359,7 +359,7 @@ SNAhelper <- function(text){
     })
 
     shiny::observeEvent(input$do.layout,{
-      if(input$graph.layout!="smglr::layout_as_backbone"){
+      if(input$graph.layout!="graphlayouts::layout_as_backbone"){
       rv$xy <- xy
 
       } else{
