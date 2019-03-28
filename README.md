@@ -19,11 +19,12 @@ You can install the developer version with:
 devtools::install_github("schochastics/snahelper")
 ```
 
-In order to work properly, the Package also needs the `smglr` Package,
-which adds a new layout algorithm.
+In order to work properly, the Package also needs the `graphlayouts`
+Package (previously known as `smglr`), which adds a new layout
+algorithm.
 
 ``` r
-devtools::install_github("schochastics/smglr")
+devtools::install_github("schochastics/graphlayouts")
 ```
 
 ## Usage
