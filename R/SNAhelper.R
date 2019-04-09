@@ -360,16 +360,17 @@ SNAhelper <- function(text){
 
     shiny::observeEvent(input$do.layout,{
       if(input$graph.layout!="graphlayouts::layout_as_backbone"){
-      rv$xy <- xy
+        xy <- eval(parse(text = paste0(input$graph.layout,"(rv$g)")))
+        rv$xy <- xy
 
       } else{
         xy <- eval(parse(text = paste0(input$graph.layout,"(rv$g)")))
-        rv$xy <- xy
+        rv$xy <- xy$xy
 
         bb <- rep(0,ecount(rv$g))
         bb[xy$backbone] <- 1
         g <- igraph::set.edge.attribute(graph = rv$g,name = "backbone",value = bb)
-        rv$g_iso <- g
+        rv$g <- g
 
         eattr.to.aes <- igraph::edge_attr_names(g)
         if(length(eattr.to.aes)>0){
