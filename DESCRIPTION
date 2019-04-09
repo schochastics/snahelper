@@ -17,7 +17,6 @@ Imports: ggraph,
     rstudioapi,
     ggplot2,
     shiny,
-    graphlayouts,
     DT,
     colourpicker
 Depends:
