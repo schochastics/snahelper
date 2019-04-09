@@ -11,6 +11,7 @@ License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Imports: ggraph,
+    graphlayouts,
     igraph,
     miniUI,
     rstudioapi,
@@ -19,8 +20,6 @@ Imports: ggraph,
     graphlayouts,
     DT,
     colourpicker
-Remotes:
-    schochastics/graphlayouts
 Depends:
     R (>= 3.0.0)
 RoxygenNote: 6.1.1
