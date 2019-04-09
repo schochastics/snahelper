@@ -223,7 +223,11 @@ SNAhelper <- function(text){
                                    )
                       ),
                       miniTabPanel("result", icon = icon('bezier-curve'),
-                                   plotOutput("Graph4", width = '100%', height = '95%')),
+                                   plotOutput("Graph4", width = '100%', height = '90%'),
+                                   miniContentPanel(
+                                     scrollable = TRUE,
+                                   downloadButton("downloadData", "Save PNG"))),
+
                       miniTabPanel("help", icon = icon('question-circle'),
                                    miniContentPanel(
                                      scrollable = TRUE,
@@ -763,6 +767,19 @@ SNAhelper <- function(text){
     ggnet <- renderPlot( {
       eval(parse(text = gg_reactive()))
     })
+
+    #render for save
+    plotInput = function() {
+      eval(parse(text = gg_reactive()))
+    }
+
+    #save plot as png
+    output$downloadData <- downloadHandler(
+      filename = "graph.png",
+      content = function(file) {
+        ggsave(file,plot=plotInput())
+      }
+    )
     #render Attribute Manager
     dfattrN <- renderDataTable({
       DT_reactiveN()
