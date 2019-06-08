@@ -20,11 +20,10 @@ devtools::install_github("schochastics/snahelper")
 ```
 
 In order to work properly, the Package also needs the `graphlayouts`
-Package (previously known as `smglr`), which adds a new layout
-algorithm.
+package, which adds a new layout algorithm.
 
 ``` r
-devtools::install_github("schochastics/graphlayouts")
+install.packages("graphlayouts")
 ```
 
 ## Usage

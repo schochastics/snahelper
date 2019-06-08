@@ -13,6 +13,7 @@ LazyData: true
 Imports: ggraph,
     graphlayouts,
     igraph,
+    formatR,
     miniUI,
     rstudioapi,
     ggplot2,

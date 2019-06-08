@@ -1,8 +1,8 @@
 # snahelper 0.3.0
 
+* added `formatR` for nicer code output
 * added backbone layout support
 * centrality indices in node attribute manager automatically adapt to type of graph (directed/weighted/etc.)
-* help section added (empty)
 
 # snahelper 0.2.0
 

@@ -19,7 +19,7 @@ NULL
 
 SNAhelper <- function(text){
   if (!requireNamespace("graphlayouts", quietly = TRUE)) {
-    stop("graphlayouts package not found. Install it with devtools::install_github('schochastics/graphlayouts')", call. = FALSE)
+    stop("graphlayouts package not found. Install it with install.packages('graphlayouts')", call. = FALSE)
   }
 
   if (any(ls(envir = .GlobalEnv) == text)) {
@@ -226,16 +226,7 @@ SNAhelper <- function(text){
                                    plotOutput("Graph4", width = '100%', height = '90%'),
                                    miniContentPanel(
                                      scrollable = TRUE,
-                                   downloadButton("downloadData", "Save PNG"))),
-
-                      miniTabPanel("help", icon = icon('question-circle'),
-                                   miniContentPanel(
-                                     scrollable = TRUE,
-                                     fillRow(height = heading.height, width = '100%',
-                                             headingOutput('Help (Comming Soon)')
-                                     )
-                                  )
-                      )
+                                   downloadButton("downloadData", "Save PNG")))
 
     ))
 
@@ -245,7 +236,6 @@ SNAhelper <- function(text){
     #####################
     #constants ----
     #####################
-    # colour.choices <- colours2HEX(colours.available)
     vattr.to.aes <- igraph::vertex_attr_names(g)[!grepl("name",igraph::vertex_attr_names(g))]
     if(length(vattr.to.aes)>0){
     idC <- which(sapply(vattr.to.aes,function(x) is.numeric(igraph::get.vertex.attribute(g,x))))
@@ -805,15 +795,13 @@ SNAhelper <- function(text){
     #  DONE -----
     observeEvent(input$done, {
       result <- gg_reactive()
-      result <- gsub("\\+","\\+ \n\t",result)
       result <- gsub("ggraph\\(rv\\$g,",paste0("ggraph\\(",text,","),result)
       V(rv$g)$x <- rv$xy[,1]
       V(rv$g)$y <- rv$xy[,2]
       result <- gsub("rv\\$xy\\[,1\\]",paste0("V(",text,")$x"),result)
       result <- gsub("rv\\$xy\\[,2\\]",paste0("V(",text,")$y"),result)
-      # res_lay <- paste0("xy <- ",input$graph.layout,"(",text,")\n")
-      # result <- paste0(res_lay,result)
-      # eval(parse(text = paste0(text,"<<- rv$g")))
+      result <- formatR::tidy_source(text=result,output = FALSE)$text.tidy
+      result <- gsub("\\+","\\+ \n\t",result)
       eval(parse(text = paste0("assign(\"",text,"\",rv$g",",envir = .GlobalEnv)")))
       rstudioapi::insertText(result)
       invisible(stopApp())
