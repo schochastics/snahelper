@@ -1,5 +1,6 @@
 # snahelper 0.3.0
 
+* tweaking node position is now possible via clicking on desired location
 * added `formatR` for nicer code output
 * added backbone layout support
 * centrality indices in node attribute manager automatically adapt to type of graph (directed/weighted/etc.)

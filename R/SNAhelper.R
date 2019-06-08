@@ -43,7 +43,7 @@ SNAhelper <- function(text){
     gadgetTitleBar("SNA helper"),
     miniTabstripPanel(selected = 'layout',
                       miniTabPanel("layout", icon = icon('sliders'),
-                                   plotOutput("Graph1", width = '100%', height = '55%'),
+                                   plotOutput("Graph1", width = '100%', height = '55%',click = "tweakxy"),
                                    miniContentPanel(
                                      scrollable = TRUE,
                                      fillRow(height = heading.height, width = '100%',
@@ -70,10 +70,7 @@ SNAhelper <- function(text){
                                      fillRow(height = line.height, width = '100%',
                                              selectizeInput('nodeId', label = 'NodeID', choices = 1:vcount(g),
                                                             width = input.width),
-                                             numericInput('nudgeX', label = 'moveX',
-                                                          min = -5, max = 5, step = 0.01, value = 0,width=input.width),
-                                             numericInput('nudgeY', label = 'moveY',
-                                                          min = -5, max = 5, step = 0.01, value = 0,width=input.width)
+                                             p("tweak node position by clicking on the desired location.")
                                      )
                                    )
                       ),
@@ -390,37 +387,45 @@ SNAhelper <- function(text){
     #####################
     #tweak layout ----
     #####################
-    shiny::observeEvent(input$nodeId,{
-      idN <- as.numeric(input$nodeId)
-      xmin <- rv$xy[idN,1]-3
-      xmax <- rv$xy[idN,1]+3
-      xsel <- rv$xy[idN,1]
-      updateNumericInput(session = session,'nudgeX','moveX', value = xsel,
-                         min = xmin,max = xmax,step = 0.01)
-
-      ymin <- rv$xy[idN,2]-3
-      ymax <- rv$xy[idN,2]+3
-      ysel <- rv$xy[idN,2]
-      updateNumericInput(session = session,'nudgeY','moveY', value = ysel,
-                         min = ymin,max = ymax,step = 0.01)
-    })
-
-    shiny::observeEvent(input$nudgeX,{
+    shiny::observeEvent(input$tweakxy,{
       indX <- as.numeric(input$nodeId)
-      # x <- rv$xy[indX,1]
-      # x <- x+input$nudgeX
-      # rv$xy[indX,1] <- x
-      rv$xy[indX,1] <- input$nudgeX
+      rv$xy[indX,1] <- input$tweakxy$x
+      rv$xy[indX,2] <- input$tweakxy$y
       gg_reactive()
 
     })
-    shiny::observeEvent(input$nudgeY,{
-      indX <- as.numeric(input$nodeId)
 
-      rv$xy[indX,2] <- input$nudgeY
-      gg_reactive()
-
-    })
+    # shiny::observeEvent(input$nodeId,{
+    #   idN <- as.numeric(input$nodeId)
+    #   xmin <- rv$xy[idN,1]-3
+    #   xmax <- rv$xy[idN,1]+3
+    #   xsel <- rv$xy[idN,1]
+    #   updateNumericInput(session = session,'nudgeX','moveX', value = xsel,
+    #                      min = xmin,max = xmax,step = 0.01)
+    #
+    #   ymin <- rv$xy[idN,2]-3
+    #   ymax <- rv$xy[idN,2]+3
+    #   ysel <- rv$xy[idN,2]
+    #   updateNumericInput(session = session,'nudgeY','moveY', value = ysel,
+    #                      min = ymin,max = ymax,step = 0.01)
+    # })
+    #
+    # shiny::observeEvent(input$nudgeX,{
+    #   indX <- as.numeric(input$nodeId)
+    #   # x <- rv$xy[indX,1]
+    #   # x <- x+input$nudgeX
+    #   # rv$xy[indX,1] <- x
+    #   rv$xy[indX,1] <- input$nudgeX
+    #   gg_reactive()
+    #
+    # })
+    # shiny::observeEvent(input$nudgeY,{
+    #   indX <- as.numeric(input$nodeId)
+    #
+    #   rv$xy[indX,2] <- input$nudgeY
+    #   gg_reactive()
+    #
+    # })
     #####################
     #calculate centrality/clustering if needed ----
     #####################
