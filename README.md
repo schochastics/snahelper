@@ -1,7 +1,8 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-[![lifecycle](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
+[![Lifecycle:
+maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
 
 # snahelper
 
@@ -15,8 +16,8 @@ screenshots are from an older version of the tool*)
 You can install the developer version with:
 
 ``` r
-#install.packages(devtools)
-devtools::install_github("schochastics/snahelper")
+#install.packages(remotes)
+remotes::install_github("schochastics/snahelper")
 ```
 
 In order to work properly, the Package also needs the `graphlayouts`

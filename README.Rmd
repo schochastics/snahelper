@@ -12,7 +12,7 @@ knitr::opts_chunk$set(
   out.width = "100%"
 )
 ```
-[![lifecycle](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
+[![Lifecycle: maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
 
 # snahelper
 
@@ -26,8 +26,8 @@ knitr::opts_chunk$set(
 You can install the developer version with:
 
 ``` {r install1,eval=FALSE}
-#install.packages(devtools)
-devtools::install_github("schochastics/snahelper")
+#install.packages(remotes)
+remotes::install_github("schochastics/snahelper")
 ```
 
 In order to work properly, the Package also needs the `graphlayouts` package, which adds a new
