@@ -1,4 +1,6 @@
+^cran-comments\.md$
 ^README\.Rmd$
 ^.*\.Rproj$
 ^\.Rproj\.user$
 figures/
+^CRAN-RELEASE$

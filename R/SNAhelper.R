@@ -2,8 +2,8 @@
 #'
 #' \code{SNAhelper} is a RStudio-Addin that provides a graphical interface for network analysis and visualization.
 #'
-#' @details To run the addin, highlight an igraph-object in your current script and select \code{SNAhelper} from the Addins-menu within RStudio. After terminating the addin, a character string containing the code for visualization is inserted in your current script.
-#'
+#' @details To run the addin, highlight an igraph-object in your current script and select \code{SNAhelper} from the Addins-menu within RStudio. After terminating the addin, a character string containing the code for visualization is inserted in your current script. Alternatively you can run it with SNAhelperGadget(graph) from the console.
+#' @param graph An igraph object to visualize
 #' @return \code{SNAelper} returns a character vector with code.
 #' @import miniUI
 #' @import shiny
@@ -823,6 +823,25 @@ SNAhelper <- function(text){
   runGadget(ui, server, stopOnCancel = FALSE, viewer = viewer)
 }
 
+#' @export
+#' @examples
+#' if (interactive()) {
+#'   graph <- igraph::sample_gnp(100,0.2)
+#'   SNAhelperGadget(graph)
+#' }
+#' @rdname SNAhelper
+SNAhelperGadget <- function(graph) {
+  if (missing(graph)) {
+    stop('You must provide an igraph object.', call. = FALSE)
+  }
+  graph <- deparse(substitute(graph))
+  if (grepl('^\\s*[[:alpha:]]+[[:alnum:]\\.]*\\s*$', paste0(graph, collapse = ''))) {
+    SNAhelper(graph)
+  } else {
+    stop('You must provide an igraph object.', call. = FALSE)
+  }
+
+}
 
 #' @export
 #' @rdname SNAhelper
