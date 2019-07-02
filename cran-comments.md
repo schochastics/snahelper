@@ -1,5 +1,6 @@
 # Resubmission 1
 
+Thanks for the feedback.
 All occurences of RStudio are now in single quotes in Title and Description.
 
 >Why wouldn't this work in R?
