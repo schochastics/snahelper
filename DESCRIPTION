@@ -5,7 +5,7 @@ Version: 0.3.0
 Authors@R: person("David", "Schoch", email = "david.schoch@manchester.ac.uk", role = c("aut", "cre"))
 Description: 'RStudio' addin which provides a GUI to visualize and analyse networks. 
     After finishing a session, the code to produce the plot is inserted in the current script.
-    Alternatively, the function 'SNAhelperGadget' can be used directly from the console.
+    Alternatively, the function SNAhelperGadget() can be used directly from the console.
 URL: https://github.com/schochastics/snahelper
 BugReports: https://github.com/schochastics/snahelper/issues
 License: MIT + file LICENSE

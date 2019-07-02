@@ -1,3 +1,7 @@
+# Resubmission 2
+
+Deleted quotation marks around SNAhelperGadget and added "()".
+
 # Resubmission 1
 
 Thanks for the feedback.
