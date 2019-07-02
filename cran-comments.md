@@ -1,3 +1,12 @@
+# Resubmission 1
+
+All occurences of RStudio are now in single quotes in Title and Description.
+
+>Why wouldn't this work in R?
+
+Not sure what this comment exactly means. I added another sentence to the 
+description indicating that the addin can also be started directly from an R terminal.
+
 # Inital submission
 
 ## Test environments
