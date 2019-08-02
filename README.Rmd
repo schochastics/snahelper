@@ -13,6 +13,8 @@ knitr::opts_chunk$set(
 )
 ```
 [![Lifecycle: maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
+[![CRAN status](https://www.r-pkg.org/badges/version/snahelper)](https://cran.r-project.org/package=snahelper)
+[![Downloads](https://cranlogs.r-pkg.org/badges/snahelper)](https://CRAN.R-project.org/package=snahelper)
 
 # snahelper
 
