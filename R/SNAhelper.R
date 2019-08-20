@@ -21,7 +21,7 @@ SNAhelper <- function(text){
   if (!requireNamespace("graphlayouts", quietly = TRUE)) {
     stop("graphlayouts package not found. Install it with install.packages('graphlayouts')", call. = FALSE)
   }
-  if(packageVersion("ggraph")<"1.0.2.9999"){
+  if(utils::packageVersion("ggraph")<"1.0.2.9999"){
     stop("snahelper needs a newer version of ggraph. please update it")
   }
 
