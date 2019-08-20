@@ -18,8 +18,7 @@ knitr::opts_chunk$set(
 
 # snahelper
 
-`snahelper` is an Rstudio Addin to analyse and visualize networks. 
-(*All screenshots are from an older version of the tool*)
+`snahelper` is an RStudio Addin to analyse and visualize networks. 
 
 ![](figures/example.png)
 
@@ -36,8 +35,8 @@ install.packages("snahelper")
 
 
 
-In order to work properly, the Package also needs the `graphlayouts` package, which adds a new
-layout algorithm.
+In order to work properly, the Package also needs the `graphlayouts` package, which adds new
+layout algorithms.
 ```{r install2,eval=FALSE}
 install.packages("graphlayouts")
 ```
@@ -80,11 +79,10 @@ g
 ### Layout
 
 The layout tab allows you to choose from all implemented algorithms in `igraph` and
-the stress based layout from `smglr`, which is the default and recommended choice.
+some layouts from `graphlayouts`. The default is a stress based layout and also the recommended choice.
 See [my blog](http://blog.schochastics.net/post/stress-based-graph-layouts/) for an
-explanation. In the tweak section you can move individual nodes around. The implementation
-is still very crude, so don't expect miracles from that. The layout is saved as node attributes
-x and y.
+explanation. In the tweak section you can move individual nodes around. Choose the node from
+the dropdown menu and click on its new position in the plot.
 
 ![](figures/layout.png)
 
@@ -92,7 +90,8 @@ x and y.
 
 The Node Attribute Manager shows all existing node attributes in a sortable table.
 In addition, you can calculate some new ones (centrality and clustering). 
-More will be added in the future.
+The functions automatically choose the right version of indices, depending if
+the network is directed/weighted/undirected/unweighted.
 
 ![](figures/NattributeMan.png)
 
@@ -113,12 +112,8 @@ Same as Node Attribute Manager but for edges. So far only shows existing edge at
 
 You can style your edges here. `snahelper` automatically detects if your network
 is directed and adds arrows if the network is directed. The other options are similar to the nodes tab.
-~~The curvature option allows you to bend edges. I highly suggest, that you only bend your
-edges if there are two edges running between the same set of nodes to make them visible.
-If you do not have reciprocal edges, then just leave it at 0.~~ 
-Edges are now drawn with `geom_edge_fan` to automatically bend reciprocal edges and leave other
-edges straight. The `Pts. per Edge` input controls the number of points drawn along the edge.
-In most use cases this should simply be 2. The value should be increased though in the presence of reciprocal directed edges.
+The snahelper automatically chooses the appropriate edge geom. If multiple edges are present, it uses
+`geom_edge_parallel0()`. Otherwise `geom_edge_link0()`.
 
 ![](figures/edges.png)
 
@@ -126,5 +121,6 @@ In most use cases this should simply be 2. The value should be increased though 
 
 The result tab shows the network in its full size. If you are satisfied with the results, hit
 the Done button and the R code to produce the plot is automatically inserted in your script.
+Or you can directly save the result as a png file.
 
 ![](figures/result.png)
