@@ -594,7 +594,7 @@ SNAhelper <- function(text){
       #--------------------#
       #edges ----
       #--------------------#
-      if(input$edgeColAttr=="None" & input$edgeSizeAttr=="None" & input$edgeAlphaAttr=="None"){
+      if(input$edgeColAttr=="None" & input$edgeColAttrD=="None" & input$edgeSizeAttr=="None" & input$edgeAlphaAttr=="None"){
         code_edges <- paste0(edge_geom,
                              "edge_colour = \"",input$edgeColMan,"\"",
                              ",edge_width = ",input$edgeSizeMan,
@@ -607,36 +607,51 @@ SNAhelper <- function(text){
         }
 
       } else if(input$edgeColAttr!="None" & input$edgeSizeAttr=="None" & input$edgeAlphaAttr=="None"){
-        code_edges <- paste0(edge_geom,
-                             "aes(colour = ",input$edgeColAttr,")",
-                             ",edge_width = ",input$edgeSizeMan,
-                             ",edge_alpha = ",input$edgeAlphaMan,")")
-        if(is.directed(g)){
-          arrow_code <- paste0(",\narrow = arrow(angle = 30, length = unit(0.15, \"inches\")",
-                               ",\nends = \"last\", type = \"closed\")",
-                               ",\nend_cap = circle(",input$nodeSizeMan+2,", \"pt\"))")
-          code_edges <- gsub(")$",arrow_code,code_edges)
-        }
-        edge_scale_col <- paste0("scale_edge_colour_gradient(low = \"",input$edgeColAttrL,"\",",
-                                 "high = \"",input$edgeColAttrH,"\")")
-        code_edges <- paste(code_edges,edge_scale_col,sep=" + ")
+          code_edges <- paste0(edge_geom,
+                               "aes(colour = ",input$edgeColAttr,")",
+                               ",edge_width = ",input$edgeSizeMan,
+                               ",edge_alpha = ",input$edgeAlphaMan,")")
+          if(is.directed(g)){
+            arrow_code <- paste0(",\narrow = arrow(angle = 30, length = unit(0.15, \"inches\")",
+                                 ",\nends = \"last\", type = \"closed\")",
+                                 ",\nend_cap = circle(",input$nodeSizeMan+2,", \"pt\"))")
+            code_edges <- gsub(")$",arrow_code,code_edges)
+          }
+          edge_scale_col <- paste0("scale_edge_colour_gradient(low = \"",input$edgeColAttrL,"\",",
+                                   "high = \"",input$edgeColAttrH,"\")")
+          code_edges <- paste(code_edges,edge_scale_col,sep=" + ")
 
-      } else if(input$edgeColAttr=="None" & input$edgeSizeAttr!="None" & input$edgeAlphaAttr=="None"){
-        code_edges <- paste0(edge_geom,
+      } else if(input$edgeColAttrD!="None" & input$edgeSizeAttr=="None" & input$edgeAlphaAttr=="None"){
+          code_edges <- paste0(edge_geom,
+                               "aes(colour = ",input$edgeColAttrD,")",
+                               ",edge_width = ",input$edgeSizeMan,
+                               ",edge_alpha = ",input$edgeAlphaMan,")")
+          if(is.directed(g)){
+            arrow_code <- paste0(",\narrow = arrow(angle = 30, length = unit(0.15, \"inches\")",
+                                 ",\nends = \"last\", type = \"closed\")",
+                                 ",\nend_cap = circle(",input$nodeSizeMan+2,", \"pt\"))")
+            code_edges <- gsub(")$",arrow_code,code_edges)
+          }
+          edge_scale_col <- paste0("scale_edge_colour_brewer(palette = \"",
+                                   input$edgeColAttrP,"\", na.value = \"gray53\")")
+          code_edges <- paste(code_edges,edge_scale_col,sep=" + ")
+
+      } else if(input$edgeColAttr=="None" & input$edgeColAttrD=="None" & input$edgeSizeAttr!="None" & input$edgeAlphaAttr=="None"){
+          code_edges <- paste0(edge_geom,
                              "aes(width = ",input$edgeSizeAttr,")",
                              ",\nedge_colour = \"",input$edgeColMan,"\"",
                              ",edge_alpha = ",input$edgeAlphaMan,")")
-        if(is.directed(g)){
-          arrow_code <- paste0(",\narrow = arrow(angle = 30, length = unit(0.15, \"inches\")",
-                               ",\nends = \"last\", type = \"closed\")",
-                               ",\nend_cap = circle(",input$nodeSizeMan+2,", \"pt\"))")
-          code_edges <- gsub(")$",arrow_code,code_edges)
-        }
-        edge_scale_size <- paste0("scale_edge_width(",
-                                  "range = c(",input$edgeSizeAttrL,",",input$edgeSizeAttrH,"))")
-        code_edges <- paste(code_edges,edge_scale_size,sep=" + ")
+          if(is.directed(g)){
+            arrow_code <- paste0(",\narrow = arrow(angle = 30, length = unit(0.15, \"inches\")",
+                                 ",\nends = \"last\", type = \"closed\")",
+                                 ",\nend_cap = circle(",input$nodeSizeMan+2,", \"pt\"))")
+            code_edges <- gsub(")$",arrow_code,code_edges)
+          }
+          edge_scale_size <- paste0("scale_edge_width(",
+                                    "range = c(",input$edgeSizeAttrL,",",input$edgeSizeAttrH,"))")
+          code_edges <- paste(code_edges,edge_scale_size,sep=" + ")
 
-      } else if(input$edgeColAttr=="None" & input$edgeSizeAttr=="None" & input$edgeAlphaAttr!="None"){
+      } else if(input$edgeColAttr=="None" & input$edgeColAttrD=="None" & input$edgeSizeAttr=="None" & input$edgeAlphaAttr!="None"){
         code_edges <- paste0(edge_geom,
                              "aes(alpha = ",input$edgeAlphaAttr,")",
                              ",\nedge_colour = \"",input$edgeColMan,"\"",
@@ -669,6 +684,24 @@ SNAhelper <- function(text){
 
         code_edges <- paste(code_edges,edge_scale_col,edge_scale_size,sep=" + ")
 
+      }else if(input$edgeColAttrD!="None" & input$edgeSizeAttr!="None" & input$edgeAlphaAttr=="None"){
+        code_edges <- paste0(edge_geom,
+                             "aes(width = ",input$edgeSizeAttr,
+                             ",\ncolour = ",input$edgeColAttrD,")",
+                             ",edge_alpha = ",input$edgeAlphaMan,")")
+        if(is.directed(g)){
+          arrow_code <- paste0(",\narrow = arrow(angle = 30, length = unit(0.15, \"inches\")",
+                               ",\nends = \"last\", type = \"closed\")",
+                               ",\nend_cap = circle(",input$nodeSizeMan+2,", \"pt\"))")
+          code_edges <- gsub(")$",arrow_code,code_edges)
+        }
+        edge_scale_size <- paste0("scale_edge_width(",
+                                  "range = c(",input$edgeSizeAttrL,",",input$edgeSizeAttrH,"))")
+        edge_scale_col <- paste0("scale_edge_colour_brewer(palette = \"",
+                                 input$edgeColAttrP,"\", na.value = \"gray53\")")
+
+        code_edges <- paste(code_edges,edge_scale_col,edge_scale_size,sep=" + ")
+
       } else if(input$edgeColAttr!="None" & input$edgeSizeAttr=="None" & input$edgeAlphaAttr!="None"){
         code_edges <- paste0(edge_geom,
                              "aes(alpha = ",input$edgeAlphaAttr,
@@ -687,7 +720,25 @@ SNAhelper <- function(text){
 
         code_edges <- paste(code_edges,edge_scale_col,edge_scale_alpha,sep=" + ")
 
-      } else if(input$edgeColAttr=="None" & input$edgeSizeAttr!="None" & input$edgeAlphaAttr!="None"){
+      } else if(input$edgeColAttrD!="None" & input$edgeSizeAttr=="None" & input$edgeAlphaAttr!="None"){
+        code_edges <- paste0(edge_geom,
+                             "aes(alpha = ",input$edgeAlphaAttr,
+                             ",colour = ",input$edgeColAttrD,")",
+                             ",\nedge_width = ",input$edgeSizeMan,")")
+        if(is.directed(g)){
+          arrow_code <- paste0(",\narrow = arrow(angle = 30, length = unit(0.15, \"inches\")",
+                               ",\nends = \"last\", type = \"closed\")",
+                               ",\nend_cap = circle(",input$nodeSizeMan+2,", \"pt\"))")
+          code_edges <- gsub(")$",arrow_code,code_edges)
+        }
+        edge_scale_alpha <- paste0("scale_edge_alpha(",
+                                   "range = c(",input$edgeAlphaAttrL,",",input$edgeAlphaAttrH,"))")
+        edge_scale_col <- paste0("scale_edge_colour_brewer(palette = \"",
+                                 input$edgeColAttrP,"\", na.value = \"gray53\")")
+
+        code_edges <- paste(code_edges,edge_scale_col,edge_scale_alpha,sep=" + ")
+
+      } else if(input$edgeColAttr=="None" & input$edgeColAttrD=="None" & input$edgeSizeAttr!="None" & input$edgeAlphaAttr!="None"){
         code_edges <- paste0(edge_geom,
                              "aes(alpha = ",input$edgeAlphaAttr,
                              ",width = ",input$edgeSizeAttr,")",
@@ -723,6 +774,26 @@ SNAhelper <- function(text){
 
         edge_scale_col <- paste0("scale_edge_colour_gradient(low = \"",input$edgeColAttrL,"\",",
                                  "high = \"",input$edgeColAttrH,"\")")
+
+        code_edges <- paste(code_edges,edge_scale_col,edge_scale_size,edge_scale_alpha,sep=" + ")
+      } else if(input$edgeColAttrD!="None" & input$edgeSizeAttr!="None" & input$edgeAlphaAttr!="None"){
+        code_edges <- paste0(edge_geom,
+                             "aes(alpha = ",input$edgeAlphaAttr,
+                             ",width = ",input$edgeSizeAttr,
+                             ",\ncolour = ",input$edgeColAttrD,")",")")
+        if(is.directed(g)){
+          arrow_code <- paste0(",\narrow = arrow(angle = 30, length = unit(0.15, \"inches\")",
+                               ",\nends = \"last\", type = \"closed\")",
+                               ",\nend_cap = circle(",input$nodeSizeMan+2,", \"pt\"))")
+          code_edges <- gsub(")$",arrow_code,code_edges)
+        }
+        edge_scale_alpha <- paste0("scale_edge_alpha(",
+                                   "range = c(",input$edgeAlphaAttrL,",",input$edgeAlphaAttrH,"))")
+        edge_scale_size <- paste0("scale_edge_width(",
+                                  "range = c(",input$edgeSizeAttrL,",",input$edgeSizeAttrH,"))")
+
+        edge_scale_col <- paste0("scale_edge_colour_brewer(palette = \"",
+                                 input$edgeColAttrP,"\", na.value = \"gray53\")")
 
         code_edges <- paste(code_edges,edge_scale_col,edge_scale_size,edge_scale_alpha,sep=" + ")
       }
