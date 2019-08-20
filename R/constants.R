@@ -4,7 +4,9 @@ line.height <- '70px'
 heading.height <- '30px'
 
 layouts.available <- list("graphlayouts" = c("Stress"="graphlayouts::layout_with_stress",
-                                      "Backbone"="graphlayouts::layout_as_backbone"),
+                                      "Backbone"="graphlayouts::layout_as_backbone",
+                                      "Radial focus" = "graphlayouts::layout_with_focus",
+                                      "Radial centrality" = "graphlayouts::layout_with_centrality"),
                           "igraph" =   c("Circle"="layout_in_circle","Nicely"= "layout_nicely",
                                          "Random"="layout_randomly",
                                          "Fruchterman-Reingold"="layout_with_fr",

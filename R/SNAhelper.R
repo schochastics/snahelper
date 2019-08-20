@@ -58,17 +58,21 @@ SNAhelper <- function(text){
                                              headingOutput('Choose Layout')
                                      ),
                                      fillRow(height = line.height, width = '100%',
-                                             selectizeInput('graph.layout',label="Layout Algorithm",
+                                             selectizeInput('graphLayout',label="Layout Algorithm",
                                                             choices=layouts.available,
                                                             selected="graphlayouts::layout_with_stress",width=input.width),
-                                             selectInput('legendPos', label = 'Show Legend',
-                                                         choices = c("none","top","bottom","left","right"),
-                                                         width = input.width)
+                                             shiny::conditionalPanel("input.graphLayout=='graphlayouts::layout_with_focus'",
+                                                                     selectizeInput('focalNode',label = 'Choose Focal Node ID',
+                                                                                    choices = 1:igraph::vcount(g),
+                                                                                    width = input.width)),
+                                             shiny::conditionalPanel("input.graphLayout=='graphlayouts::layout_with_centrality'",
+                                                                     selectizeInput('centralLay',label = 'Choose Centrality',
+                                                                                    choices = NULL,
+                                                                                    width = input.width))
                                      ),
-                                     fillRow(height = line.height, width = '100%',
+                                     fillRow(height = line.height, width = '50%',
                                              actionButton("do.layout","Calculate Layout"),
                                              actionButton("del.isolate","Delete Isolates")
-                                             # checkboxInput("showIso", label = "Show Isolates", value = TRUE)
                                      ),
                                      fillRow(height = heading.height, width = '100%',
                                              headingOutput('Tweak Layout'),
@@ -235,10 +239,16 @@ SNAhelper <- function(text){
                                    )
                       ),
                       miniTabPanel("result", icon = icon('bezier-curve'),
-                                   plotOutput("Graph4", width = '100%', height = '90%'),
+                                   plotOutput("Graph4", width = '90%', height = '80%'),
                                    miniContentPanel(
                                      scrollable = TRUE,
-                                   downloadButton("downloadData", "Save PNG")))
+                                     fillRow(height = line.height, width = '50%',
+                                     selectInput('legendPos', label = 'Show Legend:',
+                                                 choices = c("none","top","bottom","left","right"),
+                                                 width = input.width)),
+                                     downloadButton("downloadData", "Save PNG")
+                                     )
+                                   )
 
     ))
 
@@ -305,6 +315,10 @@ SNAhelper <- function(text){
     #--------------------#
     #initialize selectors ----
     #--------------------#
+    updateSelectizeInput(session = session, inputId = 'centralLay',
+                         choices = vattrC.to.aes, selected = "None", server = TRUE,
+                         options = list(create = TRUE))
+
     updateSelectizeInput(session = session, inputId = 'nodeColAttr',
                          choices = vattrC.to.aes, selected = "None", server = TRUE,
                          options = list(create = TRUE))
@@ -384,12 +398,8 @@ SNAhelper <- function(text){
     })
 
     shiny::observeEvent(input$do.layout,{
-      if(input$graph.layout!="graphlayouts::layout_as_backbone"){
-        xy <- eval(parse(text = paste0(input$graph.layout,"(rv$g)")))
-        rv$xy <- xy
-
-      } else{
-        xy <- eval(parse(text = paste0(input$graph.layout,"(rv$g)")))
+      if(input$graphLayout=="graphlayouts::layout_as_backbone"){
+        xy <- eval(parse(text = paste0(input$graphLayout,"(rv$g)")))
         rv$xy <- xy$xy
 
         bb <- rep(0,ecount(rv$g))
@@ -415,6 +425,17 @@ SNAhelper <- function(text){
         updateSelectizeInput(session = session, inputId = 'edgeAlphaAttr',
                              choices = eattrC.to.aes, selected = "None", server = TRUE,
                              options = list(create = TRUE))
+
+      } else if(input$graphLayout=="graphlayouts::layout_with_focus"){
+        xy <- eval(parse(text = paste0(input$graphLayout,"(rv$g, v = ",input$focalNode,")$xy")))
+        rv$xy <- xy
+      } else if(input$graphLayout=="graphlayouts::layout_with_centrality"){
+        xy <- eval(parse(text = paste0(input$graphLayout,"(rv$g, cent = get.vertex.attribute(rv$g,\"",input$centralLay,"\"))")))
+        rv$xy <- xy
+      }
+      else{
+        xy <- eval(parse(text = paste0(input$graphLayout,"(rv$g)")))
+        rv$xy <- xy
       }
       gg_reactive()
     })
@@ -443,6 +464,10 @@ SNAhelper <- function(text){
         vattr.to.aes <- igraph::vertex_attr_names(rv$g)[!grepl("name",igraph::vertex_attr_names(rv$g))]
         idC <- which(sapply(vattr.to.aes,function(x) is.numeric(igraph::get.vertex.attribute(rv$g,x))))
         vattrC.to.aes <- c("None",vattr.to.aes[idC])
+        updateSelectizeInput(session = session, inputId = 'centralLay',
+                             choices = vattrC.to.aes, selected = "None", server = TRUE,
+                             options = list(create = TRUE))
+
         updateSelectizeInput(session = session, inputId = 'nodeColAttr',
                              choices = vattrC.to.aes, selected = "None", server = TRUE,
                              options = list(create = TRUE))
