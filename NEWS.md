@@ -1,6 +1,6 @@
 # snahelper 0.4.0.9000
 
-* **BREAKING** only wokrs with the newest ggraph version (error message added)
+* **BREAKING** only works with the newest ggraph version (error message added)
 * edge geom is chosen automatically between `geom_edge_link0()` and `geom_edge_parallel0()`
 * discrete edge colors are supported now
 
