@@ -16,11 +16,13 @@ screenshots are from an older version of the tool*)
 
 ## Installation
 
-You can install the developer version with:
-
 ``` r
+# developer version
 #install.packages(remotes)
 remotes::install_github("schochastics/snahelper")
+
+#CRAN version
+install.packages("snahelper")
 ```
 
 In order to work properly, the Package also needs the `graphlayouts`

@@ -25,12 +25,16 @@ knitr::opts_chunk$set(
 
 ## Installation
 
-You can install the developer version with:
-
 ``` {r install1,eval=FALSE}
+# developer version
 #install.packages(remotes)
 remotes::install_github("schochastics/snahelper")
+
+#CRAN version
+install.packages("snahelper")
 ```
+
+
 
 In order to work properly, the Package also needs the `graphlayouts` package, which adds a new
 layout algorithm.
