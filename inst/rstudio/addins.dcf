@@ -1,4 +1,9 @@
 Name: SNAhelper
-Description: Analyse your network in a GUI
+Description: Analyse/Visualize a network in a GUI
 Binding: SNAhelperAddin
+Interactive: true
+
+Name: Netbuilder
+Description: Build your own network
+Binding: NetbuilderAddin
 Interactive: true

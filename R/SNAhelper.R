@@ -4,7 +4,7 @@
 #'
 #' @details To run the addin, highlight an igraph-object in your current script and select \code{SNAhelper} from the Addins-menu within RStudio. After terminating the addin, a character string containing the code for visualization is inserted in your current script. Alternatively you can run it with SNAhelperGadget(graph) from the console.
 #' @param graph An igraph object to visualize
-#' @return \code{SNAelper} returns a character vector with code.
+#' @return \code{SNAhelper} returns a character vector with code.
 #' @import miniUI
 #' @import shiny
 #' @import ggplot2

@@ -68,3 +68,14 @@ jsColourSelector <- I(
   return "<div><div style=\'width:25px; height:15px; background-color:" + item.rgb + "; float:left; vertical-align:bottom\'></div>&nbsp;" + escape(item.name) + "</div>";
   }
   }')
+
+
+closest_node <- function(p,xy){
+  dists <- sqrt((p[1]-xy[,1])^2+(p[2]-xy[,2])^2)
+  mdist <- min(dists)
+  if(mdist<1){
+    return(which.min(dists))
+  } else{
+    return(-1)
+  }
+}
