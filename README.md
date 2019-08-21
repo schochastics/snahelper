@@ -15,7 +15,8 @@ common network analytic tasks and visualize a network with
 [ggraph](https://ggraph.data-imaginist.com/).
 
 The second addin, called `Netbuilder` allows you to quickly build small
-networks with a small “canvas” to draw on.
+networks with a small “canvas” to draw on. The network can be exported
+as an igraph object at the end of the session by clicking on “Done”.
 
 ## Quick example of SNAhelper
 
