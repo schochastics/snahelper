@@ -1,6 +1,8 @@
 # snahelper 0.4.0.9000
 
 * **BREAKING** only works with the newest ggraph version (error message added)
+* added `Netbuilder` addin
+* added `Netreader` addin
 * edge geom is chosen automatically between `geom_edge_link0()` and `geom_edge_parallel0()`
 * discrete edge colors are supported now
 * added support for `layout_with_focus()` and `layout_with_centrality()`
