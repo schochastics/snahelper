@@ -27,12 +27,13 @@ Netbuilder <- function(){
     plotOutput("Graph1", width = '80%', height = '80%',click = "add_edge",dblclick = "add_vertex"),
                # hover = hoverOpts(id = "showXY",delay = 500,delayType = "throttle")),
     fillRow(height = line.height, width = '75%',
-      textAreaInput("text",label = NA,value = "graph"),
       actionButton("makeU","make undirected"),
       actionButton("makeD","make directed"),
       actionButton("clearG","clear"),
-      verbatimTextOutput("coordXY")
-    )
+      textAreaInput("text",label = NA,value = "graph")
+      # verbatimTextOutput("coordXY")
+    ),
+    p("Double Click: add vertex. Click on two nodes: add edge. Done: Export graph to global enivronment with name from text input field")
 
   )
 
@@ -68,6 +69,7 @@ Netbuilder <- function(){
           g <- igraph::add.edges(g,c(start,nrow(xy)))
           rv$xy <- xy
           rv$g <- g
+          rv$el <- rbind(rv$el,c(start,nrow(xy)))
         }
       }
       gg_reactive()
@@ -114,7 +116,7 @@ Netbuilder <- function(){
     })
 
     shiny::observeEvent(input$clearG,{
-        g <- graph.empty(n=0)
+        g <- graph.empty(n=0,directed = FALSE)
         rv$g <- g
         xy <- matrix(0,0,2)
         rv$xy <- xy
