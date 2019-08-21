@@ -7,3 +7,8 @@ Name: Netbuilder
 Description: Build your own network
 Binding: NetbuilderAddin
 Interactive: true
+
+Name: Netreader
+Description: Import raw network data
+Binding: NetreaderAddin
+Interactive: true

@@ -6,26 +6,33 @@
 #' @return \code{Netreader} returns the created network as igraph object.
 #' @import miniUI
 #' @import shiny
-#' @import ggplot2
-#' @import ggraph
 #' @import rstudioapi
-#' @import igraph
+#' @importFrom igraph graph_from_adjacency_matrix graph_from_data_frame vcount vertex_attr_names set_vertex_attr get.vertex.attribute
+#' @importFrom utils read.table
 #' @name Netbuilder
 NULL
 
 Netreader <- function(){
-  rv <- reactiveValues(g = NULL)
+  rv <- reactiveValues(g = NULL,code = NULL)
   #ui ----
   ui <- miniPage(
+    tags$head(
+      tags$style(HTML("hr {border-top: 1px solid #000000;}"))
+    ),
     tags$script(jscodeWidth),
     tags$script(jscodeHeight),
     tags$style(type = "text/css", ".selectize-dropdown{ width: 200px !important; }"),
     tags$style(type = "text/css",".form-group.shiny-input-container{width:50%;}"),
-    tags$style(type='text/css', '#preview {background-color: rgba(255,255,0,0.40); color: green;}'),
+    tags$style(type = 'text/css', '#preview {background-color: rgba(255,255,0,0.40); color: green;}'),
+    tags$style(type = 'text/css', '#previewA {background-color: rgba(255,255,0,0.40); color: green;}'),
+    tags$style(type = 'text/css', '#netpreview {background-color: rgba(255,255,0,0.40); color: green;}'),
+    tags$style(type = 'text/css', '#netpreviewA {background-color: rgba(255,255,0,0.40); color: green;}'),
+    tags$style(type = 'text/css', '#readit {background-color: rgba(30,144,255,1); color: white}'),
+    tags$style(type = 'text/css', '#readitA {background-color: rgba(30,144,255,1); color: white}'),
 
     gadgetTitleBar("Netreader"),
     miniTabstripPanel(selected = 'Read Network',
-      miniTabPanel("Read Network",
+      miniTabPanel("Read Network",icon = icon('bezier-curve'),
         fillRow(height = line.height, width = '100%',
           fileInput("netfile", "Choose network file")
         ),
@@ -45,19 +52,42 @@ Netreader <- function(){
           radioButtons("readfct","network format", choices = c("edgelist","adjacency matrix")),
           radioButtons("valsep","file delimiter", choices=c("comma"=",","space"=" ","tab"="\t"))
         ),
-        tags$hr(),
+        hr(),
         fillRow(height = line.height, width = '100%',
-              actionButton("readit","Read Network"),
+              actionButton("readit","Import Network"),
               textAreaInput("text",label = NA,value = "",placeholder = "enter name",height="35px")
         ),
         fillRow(height = "120px", width = '100%',
                 verbatimTextOutput("netpreview")
         )
       ),
-      miniTabPanel("Add Attributes",
-       fillRow(height = line.height, width = '100%',
-               h4("File Preview (first 5 lines)")
-       )
+      #attributes ----
+      miniTabPanel("Add Attributes",icon = icon("list-ol"),
+           fillRow(height = line.height, width = '100%',
+                   fileInput("attrfile", "Choose attribute file")
+           ),
+           fillRow(height = line.height, width = '100%',
+                   h4("File Preview (first 5 lines)")
+           ),
+           fillRow(height = "120px", width = '100%',
+                   verbatimTextOutput("previewA")
+           ),
+           fillRow(height = line.height, width='50%',
+                   checkboxInput("colnamesA","Header",value=TRUE),
+                   checkboxInput("quotesA","Quotes",value=FALSE),
+                   radioButtons("valsepA","file delimiter", choices=c("comma"=",","space"=" ","tab"="\t"))
+           ),
+           tags$hr(),
+           fillRow(height = line.height, width = '100%',
+                   actionButton("readitA","Import Attributes")
+           ),
+           fillRow(height = "120px", width = '100%',
+                   verbatimTextOutput("netpreviewA")
+           )
+      ),
+      #show code ----
+      miniTabPanel("Review Code",
+          verbatimTextOutput("codereview")
       )
     )
   )
@@ -72,13 +102,34 @@ Netreader <- function(){
       txt
     })
 
+    #attribute preview ----
+    output$previewA <- renderText({
+      inFile <- input$attrfile
+      if (is.null(inFile)) return(NULL)
+      txt <- readLines(inFile$datapath,n=5)
+      txt <- paste(txt,collapse="\n")
+      txt
+    })
+
     #network preview ----
     output$netpreview <- renderPrint({
       g <- rv$g
       if (is.null(g)) return("no network created yet.")
-      g
+      summary(g)
     })
-    # read function ----
+
+    #network2 preview ----
+    output$netpreviewA <- renderPrint({
+      g <- rv$g
+      if (is.null(g)) return("no network created yet.")
+      summary(g)
+    })
+
+    # codeoutput ----
+    output$codereview <- renderPrint({
+      cat(rv$code)
+    })
+    # read network ----
     observeEvent(input$readit,{
       inFile <- input$netfile
       q <- ifelse(input$quotes,"\"","")
@@ -86,37 +137,106 @@ Netreader <- function(){
       A <- tryCatch(read.table(inFile$datapath,
                                header = input$colnames,
                                row.names = 1,
-                               sep = input$valsep,quote = q),
+                               sep = input$valsep,quote = q,
+                               stringsAsFactors = FALSE),
                     error=function(e) NULL)
+      head <- "library(igraph)\n\n# load raw network data ----\n"
+      cmd <- paste0("A <- read.table(file = '",inFile$name,"'",", header = ", input$colnames,", row.names = 1",
+                    ", sep = '",input$valsep,"'",", quote = '",q,"', stringsAsFactors = FALSE)\n")
+      rv$code <- paste(head,cmd)
       } else{
         A <- tryCatch(read.table(inFile$datapath,
                                  header = input$colnames,
-                                 sep = input$valsep,quote = q),
+                                 sep = input$valsep,quote = q,
+                                 stringsAsFactors = FALSE),
                       error=function(e) NULL)
+        head <- "library(igraph)\n# load raw network data ----\n"
+        cmd <- paste0("A <- read.table(file = '",inFile$name,"'",", header = ", input$colnames,", sep = '",input$valsep,"'",
+                      ", quote = '",q,"', stringsAsFactors = FALSE)\n")
+        rv$code <- paste0(head,cmd)
       }
       if(is.null(A)){
-        showNotification("something went wrong reading the file. Check your settings",type = "error")
+        showNotification("something went wrong reading the file. Check your settings",type = "error",duration = 2)
       } else{
         if(input$readfct=="adjacency matrix"){
           mode <- ifelse(input$directed,"directed","undirected")
-          g <- tryCatch(igraph::graph_from_adjacency_matrix(as.matrix(A),mode = mode),error=function(e) NULL)
+          g <- tryCatch(graph_from_adjacency_matrix(as.matrix(A),mode = mode),error=function(e) NULL)
           if(is.null(g)){
-            showNotification("something went wrong creating the network.",type = "error")
+            showNotification("something went wrong creating the network.",type = "error",duration = 2)
           } else{
+            head <- "# create network ----\n"
+            cmd <- paste0("g <- graph_from_adjacency_matrix(as.matrix(A),mode = '",mode,"')\n")
+            rv$code <- paste0(rv$code,head,cmd)
             rv$g <- g
+            showNotification("network data successfully imported",type = "message",duration = 2)
           }
         }
         else if(input$readfct=="edgelist"){
           mode <- ifelse(input$directed,T,F)
-          g <- tryCatch(igraph::graph_from_data_frame(A,directed = mode),error=function(e) NULL)
+          g <- tryCatch(graph_from_data_frame(A,directed = mode),error=function(e) NULL)
           if(is.null(g)){
-            showNotification("something went wrong creating the network.",type = "error")
+            showNotification("something went wrong creating the network.",type = "error",duration = 2)
           } else{
+            head <- "# create network ----\n"
+            cmd <- paste0("g <- graph_from_data_frame(A,directed = ",mode,")\n")
+            rv$code <- paste0(rv$code,"\n",head,cmd)
             rv$g <- g
+            showNotification("network data successfully imported",type = "message",duration = 2)
           }
         }
       }
 
+    })
+
+    # read attributes ----
+    observeEvent(input$readitA,{
+      if(is.null(rv$g)){
+        showNotification("please import a network first",type = "error",duration = 2)
+      } else{
+        inFile <- input$attrfile
+        q <- ifelse(input$quotesA,"\"","")
+        A <- tryCatch(read.table(inFile$datapath,
+                                 header = input$colnamesA,
+                                 sep = input$valsepA,quote = q,
+                                 stringsAsFactors = FALSE),
+                      error=function(e) NULL)
+        head <- "# load raw attribute data ----\n"
+        cmd <- paste0("attrs <- read.table(file = '",inFile$name,"'",", header = ", input$colnamesA,", sep = '",input$valsepA,"'",
+                      ", quote = '",q,"', stringsAsFactors = FALSE)\n")
+        rv$code <- paste0(rv$code,"\n",head,cmd)
+
+        if(is.null(A)){
+          showNotification("something went wrong reading the file. Check your settings",type = "error",duration = 2)
+        } else{
+          if(nrow(A)!=vcount(rv$g)){
+            showNotification("The number of rows does not match the number of nodes in the network",type = "error",duration = 2)
+          } else{
+            if("name"%in%vertex_attr_names(rv$g)){
+              vnames <- get.vertex.attribute(g,"name")
+              identCol <- which(apply(A,2,function(x) all(x%in%vnames)))[1]
+              anames <- A[,identCol]
+              A <- A[,-identCol]
+              perm <- match(vnames,anames)
+              for(attr in names(A)){
+                rv$g <- set_vertex_attr(rv$g,name = attr,value = A[[attr]][perm])
+              }
+              head <- "# add attributes to network ----\n"
+              cmd <- AttrNameImport
+              rv$code <- paste0(rv$code,"\n",head,cmd)
+
+            } else{
+              showNotification("network does not have a name attribute.\nmatching by row number instead",type="warning",duration = 2)
+              for(attr in names(A)){
+                rv$g <- set_vertex_attr(rv$g,name = attr,value = A[[attr]])
+              }
+              head <- "# add attributes to network ----\n"
+              cmd <- AttrRowImport
+              rv$code <- paste0(rv$code,"\n",head,cmd)
+            }
+            showNotification("Attributes successfully imported",type = "message",duration = 2)
+          }
+        }
+      }
     })
 
     # cancel ----

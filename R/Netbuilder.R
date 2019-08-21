@@ -22,6 +22,9 @@ Netbuilder <- function(){
     tags$script(jscodeHeight),
     tags$style(type = "text/css", ".selectize-dropdown{ width: 200px !important; }"),
     tags$style(type = "text/css",".form-group.shiny-input-container{width:50%;}"),
+    tags$style(type = 'text/css', '#makeD {background-color: rgba(30,144,255,1); color: white}'),
+    tags$style(type = 'text/css', '#makeU {background-color: rgba(30,144,255,1); color: white}'),
+    tags$style(type = 'text/css', '#clearG {background-color: rgba(220,20,60,1); color: white}'),
 
     gadgetTitleBar("Netbuilder"),
     plotOutput("Graph1", width = '80%', height = '80%',click = "add_edge",dblclick = "add_vertex"),
