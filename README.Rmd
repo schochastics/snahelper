@@ -18,37 +18,18 @@ knitr::opts_chunk$set(
 
 # snahelper
 
-`snahelper` is an RStudio Addin to analyse and visualize networks. 
+`snahelper` provides a set RStudio Addin for social network analysis. 
+The main addin is the `SNAhelper` which provides a simple GUI to do common network analytic tasks
+and visualize a network with [ggraph](https://ggraph.data-imaginist.com/).
 
-![](figures/example.png)
+The second addin, called `Netbuilder` allows you to quickly build small networks with a small 
+"canvas" to draw on. 
 
-## Installation
-
-``` {r install1,eval=FALSE}
-# developer version
-#install.packages(remotes)
-remotes::install_github("schochastics/snahelper")
-
-#CRAN version
-install.packages("snahelper")
-```
-
-
-
-In order to work properly, the Package also needs the `graphlayouts` package, which adds new
-layout algorithms.
-```{r install2,eval=FALSE}
-install.packages("graphlayouts")
-```
-
-## Usage
-
-In order to use the Addin, simply highlight a network in your script and select 
-`snahelper` from the Addin dropdown menu.
+## Quick example of SNAhelper
 
 ![](figures/snahelper.gif)
 
-Below is the code to produce the starwars network used in the gif
+Code to reproduce the used network.
 ```{r starwars,eval=F}
 library(tidyverse)
 library(igraph)
@@ -73,6 +54,34 @@ g
 
 ```
 
+
+## Quick example of Netbuilder
+
+![](figures/Netbuilder.gif)
+
+## Installation
+
+``` {r install1,eval=FALSE}
+# developer version
+#install.packages(remotes)
+remotes::install_github("schochastics/snahelper")
+
+#CRAN version
+install.packages("snahelper")
+```
+
+
+
+To work properly, you also need [graphlayouts](https://github.com/schochastics/graphlayouts), which adds new
+layout algorithms.
+```{r install2,eval=FALSE}
+install.packages("graphlayouts")
+```
+
+## Usage
+
+To use the main addin, simply highlight a network in your script and select 
+`SNAhelper` from the Addin dropdown menu.
 
 ## Interface
 
