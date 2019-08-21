@@ -26,14 +26,15 @@ Netbuilder <- function(){
     gadgetTitleBar("Netbuilder"),
     plotOutput("Graph1", width = '80%', height = '80%',click = "add_edge",dblclick = "add_vertex"),
                # hover = hoverOpts(id = "showXY",delay = 500,delayType = "throttle")),
-    fillRow(height = line.height, width = '75%',
+    fillRow(height = line.height, width = '100%',
       actionButton("makeU","make undirected"),
       actionButton("makeD","make directed"),
       actionButton("clearG","clear"),
-      textAreaInput("text",label = NA,value = "graph")
-      # verbatimTextOutput("coordXY")
+      textAreaInput("text",label = NA,value = "",placeholder = "enter name",height="35px")
     ),
-    p("Double Click: add vertex. Click on two nodes: add edge. Done: Export graph to global enivronment with name from text input field")
+    p(strong("Double Click:")," add vertex.",
+      strong("Click on two nodes:")," add edge.",
+      strong("Done:"), "Export graph to global enivronment with name from text input field")
 
   )
 
@@ -85,6 +86,7 @@ Netbuilder <- function(){
       xy <- rv$xy
       xy <- rbind(xy,c(input$add_vertex$x,input$add_vertex$y))
       rv$xy <- xy
+      rv$start <- -1
       gg_reactive()
 
     })
@@ -162,8 +164,12 @@ Netbuilder <- function(){
     observeEvent(input$done, {
       V(rv$g)$x <- rv$xy[,1]
       V(rv$g)$y <- rv$xy[,2]
-      eval(parse(text = paste0("assign(\"",input$text,"\",rv$g",",envir = .GlobalEnv)")))
-      invisible(stopApp())
+      if(input$text==""){
+        showNotification("Please enter a variable name",type="warning")
+      }else{
+        eval(parse(text = paste0("assign(\"",input$text,"\",rv$g",",envir = .GlobalEnv)")))
+        invisible(stopApp())
+      }
     })
   }
 

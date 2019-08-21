@@ -4,17 +4,6 @@ headingOutput <- function(heading, height = '20px', css = 'color: #FF7F00; text-
 
 }
 
-# colours2HEX <- function(colours, Inherit = FALSE) {
-#   rgbcolours <- matrix(as.character(as.character.hexmode(col2rgb(colours), width = 2)), nrow = 3)
-#   rgbcolours <- apply(rgbcolours, 2, paste, collapse = '')
-#   rgbcolours <- paste('#', rgbcolours, sep = '')
-#   rgbcolours <- data.frame(name = colours, colour = colours, rgb = rgbcolours, stringsAsFactors = FALSE)
-#   if (Inherit) {
-#     rgbcolours <- rbind(data.frame(name = 'Inherit', colour = 'NULL', rgb = '#ffffff'), rgbcolours)
-#   }
-#   return(rgbcolours)
-# }
-
 is.validColour <- function(x) {
   if (is.null(x)) {
     return(TRUE)
@@ -71,9 +60,12 @@ jsColourSelector <- I(
 
 
 closest_node <- function(p,xy){
+  if(nrow(xy)==0){
+    return(-1)
+  }
   dists <- sqrt((p[1]-xy[,1])^2+(p[2]-xy[,2])^2)
   mdist <- min(dists)
-  if(mdist<1){
+  if(mdist<0.5){
     return(which.min(dists))
   } else{
     return(-1)
