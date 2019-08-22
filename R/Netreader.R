@@ -8,7 +8,6 @@
 #' @import shiny
 #' @import rstudioapi
 #' @importFrom igraph graph_from_adjacency_matrix graph_from_data_frame vcount vertex_attr_names set_vertex_attr get.vertex.attribute
-#' @importFrom utils read.table
 #' @name Netbuilder
 NULL
 
@@ -157,25 +156,25 @@ Netreader <- function(){
       inFile <- rv$pathN
       q <- ifelse(input$quotes,"\"","")
       if(input$rownames){
-      A <- tryCatch(read.table(inFile,
+      A <- tryCatch(utils::read.table(inFile,
                                header = input$colnames,
                                row.names = 1,
                                sep = input$valsep,quote = q,
                                stringsAsFactors = FALSE),
                     error=function(e) NULL)
       head <- "library(igraph)\n\n# load raw network data ----\n"
-      cmd <- paste0("A <- read.table(file = '",inFile,"'",
+      cmd <- paste0("A <- utils::read.table(file = '",inFile,"'",
                     ",\n                header = ", input$colnames,", row.names = 1",
                     ", sep = '",input$valsep,"'",", quote = '",q,"', stringsAsFactors = FALSE)\n")
       rv$code <- paste(head,cmd)
       } else{
-        A <- tryCatch(read.table(inFile,
+        A <- tryCatch(utils::read.table(inFile,
                                  header = input$colnames,
                                  sep = input$valsep,quote = q,
                                  stringsAsFactors = FALSE),
                       error=function(e) NULL)
         head <- "library(igraph)\n# load raw network data ----\n"
-        cmd <- paste0("A <- read.table(file = '",inFile,"'",
+        cmd <- paste0("A <- utils::read.table(file = '",inFile,"'",
                       ",\n                header = ", input$colnames,", sep = '",input$valsep,"'",
                       ", quote = '",q,"', stringsAsFactors = FALSE)\n")
         rv$code <- paste0(head,cmd)
@@ -221,13 +220,13 @@ Netreader <- function(){
         # inFile <- input$attrfile
         inFile <- rv$pathA
         q <- ifelse(input$quotesA,"\"","")
-        A <- tryCatch(read.table(inFile,
+        A <- tryCatch(utils::read.table(inFile,
                                  header = input$colnamesA,
                                  sep = input$valsepA,quote = q,
                                  stringsAsFactors = FALSE),
                       error=function(e) NULL)
         head <- "# load raw attribute data ----\n"
-        cmd <- paste0("attrs <- read.table(file = '",inFile,"'",
+        cmd <- paste0("attrs <- utils::read.table(file = '",inFile,"'",
                       ",\n                    header = ", input$colnamesA,", sep = '",input$valsepA,"'",
                       ", quote = '",q,"', stringsAsFactors = FALSE)\n")
         rv$code <- paste0(rv$code,"\n",head,cmd)
