@@ -18,6 +18,12 @@ The second addin, called `Netbuilder` allows you to quickly build small
 networks with a small “canvas” to draw on. The network can be exported
 as an igraph object at the end of the session by clicking on “Done”.
 
+The third addin `Netreader` is meant to facilitated the import of raw
+network data. It provides a GUI to easily read network and attribute
+data and combine them to an igraph object. The underlying code of the
+import procedure is shown at the end. This should help users to learn
+importing data themselves.
+
 ## Quick example of SNAhelper
 
 ![](figures/snahelper.gif)
