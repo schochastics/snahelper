@@ -53,6 +53,21 @@ V(g)$colour <- ifelse(V(g)$display=="",NA,V(g)$display)
 g
 ```
 
+## Quick example of Netreader
+
+`Netreader` should be pretty selfexplanatory. The first two tabs allow
+you to import raw data (edges and attributes). Make sure to specify file
+delimiters, etc. according to the shown preview.
+
+![](figures/Netreader1.png)
+
+Using the `Netreader` should comes with a learning effect (hopefully).
+The last tab shows the R code to produce the network with the chosen
+data **without** using the Addin. ![](figures/Netreader2.png)
+
+The network will be saved in your global environment once you click
+“Done”.
+
 ## Quick example of Netbuilder
 
 ![](figures/Netbuilder.gif)
@@ -76,7 +91,7 @@ new layout algorithms.
 install.packages("graphlayouts")
 ```
 
-## Usage
+## Usage of SNAhelper
 
 To use the main addin, simply highlight a network in your script and
 select `SNAhelper` from the Addin dropdown menu.

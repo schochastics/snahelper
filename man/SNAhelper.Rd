@@ -14,7 +14,7 @@ SNAhelperAddin()
 \item{graph}{An igraph object to visualize}
 }
 \value{
-\code{SNAelper} returns a character vector with code.
+\code{SNAhelper} returns a character vector with code.
 }
 \description{
 \code{SNAhelper} is a RStudio-Addin that provides a graphical interface for network analysis and visualization.

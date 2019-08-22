@@ -1,6 +1,6 @@
 #' Netreader
 #'
-#' \code{Netreder} is a RStudio-Addin that allows you to read network files.
+#' \code{Netreader} is a RStudio-Addin that allows you to read network files.
 #'
 #' @details To run the addin, select \code{Netreader} from the Addins-menu within RStudio.
 #' @return \code{Netreader} returns the created network as igraph object.
@@ -8,7 +8,7 @@
 #' @import shiny
 #' @import rstudioapi
 #' @importFrom igraph graph_from_adjacency_matrix graph_from_data_frame vcount vertex_attr_names set_vertex_attr get.vertex.attribute
-#' @name Netbuilder
+#' @name Netreader
 NULL
 
 Netreader <- function(){
@@ -38,10 +38,12 @@ Netreader <- function(){
         fillRow(height="30px",width='100%',
                 strong("Choose network file")
         ),
-        fillRow(height = "50px", width = '100%',
+        fillRow(height = "50px", width = '50%',
           # fileInput("netfile", "Choose network file")
           actionButton("netfile","Browse...")
-
+        ),
+        fillRow(height = "50px", width = '75%',
+          verbatimTextOutput("netfilePath")
         ),
         fillRow(height = line.height, width = '100%',
           h4("File Preview (first 5 lines)")
@@ -76,7 +78,9 @@ Netreader <- function(){
            fillRow(height = "50px", width = '100%',
                    # fileInput("attrfile", "Choose attribute file")
                    actionButton("attrfile","Browse...")
-
+           ),
+           fillRow(height="50px", width = "75%",
+                   verbatimTextOutput("attrfilePath")
            ),
            fillRow(height = line.height, width = '100%',
                    h4("File Preview (first 5 lines)")
@@ -98,21 +102,39 @@ Netreader <- function(){
            )
       ),
       #show code ----
-      miniTabPanel("Review Code",
+      miniTabPanel("Review Code",icon = icon("code"),
           verbatimTextOutput("codereview")
       )
     )
   )
   #server ----
+
   server <- function(input, output, session) {
+
+    #choose netfile path ----
     observeEvent(input$netfile,{
         rv$pathN <- file.choose()
     })
-
+    #choose attrfile path ----
     observeEvent(input$attrfile,{
       rv$pathA <- file.choose()
     })
 
+    output$netfilePath <- renderPrint(
+      if(!is.null(rv$pathN)){
+        cat(rv$pathN)
+      } else{
+        cat("no file selected")
+      }
+    )
+
+    output$attrfilePath <- renderPrint(
+      if(!is.null(rv$pathA)){
+        cat(rv$pathA)
+      } else{
+        cat("no file selected")
+      }
+    )
     # file preview ----
     output$preview <- renderText({
       # inFile <- input$netfile
@@ -238,7 +260,7 @@ Netreader <- function(){
             showNotification("The number of rows does not match the number of nodes in the network",type = "error",duration = 2)
           } else{
             if("name"%in%vertex_attr_names(rv$g)){
-              vnames <- get.vertex.attribute(g,"name")
+              vnames <- get.vertex.attribute(rv$g,"name")
               identCol <- which(apply(A,2,function(x) all(x%in%vnames)))[1]
               anames <- A[,identCol]
               A <- A[,-identCol]
