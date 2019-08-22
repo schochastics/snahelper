@@ -13,7 +13,7 @@
 NULL
 
 Netreader <- function(){
-  rv <- reactiveValues(g = NULL,code = NULL)
+  rv <- reactiveValues(g = NULL,pathN=NULL,pathA=NULL,code = NULL)
   #ui ----
   ui <- miniPage(
     tags$head(
@@ -23,18 +23,26 @@ Netreader <- function(){
     tags$script(jscodeHeight),
     tags$style(type = "text/css", ".selectize-dropdown{ width: 200px !important; }"),
     tags$style(type = "text/css",".form-group.shiny-input-container{width:50%;}"),
-    tags$style(type = 'text/css', '#preview {background-color: rgba(255,255,0,0.40); color: green;}'),
-    tags$style(type = 'text/css', '#previewA {background-color: rgba(255,255,0,0.40); color: green;}'),
-    tags$style(type = 'text/css', '#netpreview {background-color: rgba(255,255,0,0.40); color: green;}'),
-    tags$style(type = 'text/css', '#netpreviewA {background-color: rgba(255,255,0,0.40); color: green;}'),
+    tags$style(type = 'text/css', '#preview {background-color: rgba(0,0,0,0.50); color: white;}'),
+    tags$style(type = 'text/css', '#previewA {background-color: rgba(0,0,0,0.50); color: white;}'),
+    tags$style(type = 'text/css', '#netpreview {background-color: rgba(0,0,0,0.50); color: white;}'),
+    tags$style(type = 'text/css', '#netpreviewA {background-color: rgba(0,0,0,0.50); color: white;}'),
+    tags$style(type = 'text/css', '#codereview {background-color: rgba(0,0,0,1); color: white;}'),
     tags$style(type = 'text/css', '#readit {background-color: rgba(30,144,255,1); color: white}'),
     tags$style(type = 'text/css', '#readitA {background-color: rgba(30,144,255,1); color: white}'),
+    tags$style(type = 'text/css', '#netfile {background-color: rgba(30,144,255,1); color: white}'),
+    tags$style(type = 'text/css', '#attrfile {background-color: rgba(30,144,255,1); color: white}'),
 
     gadgetTitleBar("Netreader"),
-    miniTabstripPanel(selected = 'Read Network',
-      miniTabPanel("Read Network",icon = icon('bezier-curve'),
-        fillRow(height = line.height, width = '100%',
-          fileInput("netfile", "Choose network file")
+    miniTabstripPanel(selected = 'Import Network',
+      miniTabPanel("Import Network",icon = icon('bezier-curve'),
+        fillRow(height="30px",width='100%',
+                strong("Choose network file")
+        ),
+        fillRow(height = "50px", width = '100%',
+          # fileInput("netfile", "Choose network file")
+          actionButton("netfile","Browse...")
+
         ),
         fillRow(height = line.height, width = '100%',
           h4("File Preview (first 5 lines)")
@@ -63,8 +71,13 @@ Netreader <- function(){
       ),
       #attributes ----
       miniTabPanel("Add Attributes",icon = icon("list-ol"),
-           fillRow(height = line.height, width = '100%',
-                   fileInput("attrfile", "Choose attribute file")
+           fillRow(height="30px",width='100%',
+                   strong("Choose attribute file")
+           ),
+           fillRow(height = "50px", width = '100%',
+                   # fileInput("attrfile", "Choose attribute file")
+                   actionButton("attrfile","Browse...")
+
            ),
            fillRow(height = line.height, width = '100%',
                    h4("File Preview (first 5 lines)")
@@ -93,20 +106,30 @@ Netreader <- function(){
   )
   #server ----
   server <- function(input, output, session) {
+    observeEvent(input$netfile,{
+        rv$pathN <- file.choose()
+    })
+
+    observeEvent(input$attrfile,{
+      rv$pathA <- file.choose()
+    })
+
     # file preview ----
     output$preview <- renderText({
-      inFile <- input$netfile
+      # inFile <- input$netfile
+      inFile <- rv$pathN
       if (is.null(inFile)) return(NULL)
-      txt <- readLines(inFile$datapath,n=5)
+      txt <- readLines(inFile,n=5)
       txt <- paste(txt,collapse="\n")
       txt
     })
 
     #attribute preview ----
     output$previewA <- renderText({
-      inFile <- input$attrfile
+      # inFile <- input$attrfile
+      inFile <- rv$pathA
       if (is.null(inFile)) return(NULL)
-      txt <- readLines(inFile$datapath,n=5)
+      txt <- readLines(inFile,n=5)
       txt <- paste(txt,collapse="\n")
       txt
     })
@@ -114,14 +137,14 @@ Netreader <- function(){
     #network preview ----
     output$netpreview <- renderPrint({
       g <- rv$g
-      if (is.null(g)) return("no network created yet.")
+      if (is.null(g)) return(cat("no network created yet."))
       summary(g)
     })
 
     #network2 preview ----
     output$netpreviewA <- renderPrint({
       g <- rv$g
-      if (is.null(g)) return("no network created yet.")
+      if (is.null(g)) return(cat("no network created yet."))
       summary(g)
     })
 
@@ -131,27 +154,29 @@ Netreader <- function(){
     })
     # read network ----
     observeEvent(input$readit,{
-      inFile <- input$netfile
+      inFile <- rv$pathN
       q <- ifelse(input$quotes,"\"","")
       if(input$rownames){
-      A <- tryCatch(read.table(inFile$datapath,
+      A <- tryCatch(read.table(inFile,
                                header = input$colnames,
                                row.names = 1,
                                sep = input$valsep,quote = q,
                                stringsAsFactors = FALSE),
                     error=function(e) NULL)
       head <- "library(igraph)\n\n# load raw network data ----\n"
-      cmd <- paste0("A <- read.table(file = '",inFile$name,"'",", header = ", input$colnames,", row.names = 1",
+      cmd <- paste0("A <- read.table(file = '",inFile,"'",
+                    ",\n                header = ", input$colnames,", row.names = 1",
                     ", sep = '",input$valsep,"'",", quote = '",q,"', stringsAsFactors = FALSE)\n")
       rv$code <- paste(head,cmd)
       } else{
-        A <- tryCatch(read.table(inFile$datapath,
+        A <- tryCatch(read.table(inFile,
                                  header = input$colnames,
                                  sep = input$valsep,quote = q,
                                  stringsAsFactors = FALSE),
                       error=function(e) NULL)
         head <- "library(igraph)\n# load raw network data ----\n"
-        cmd <- paste0("A <- read.table(file = '",inFile$name,"'",", header = ", input$colnames,", sep = '",input$valsep,"'",
+        cmd <- paste0("A <- read.table(file = '",inFile,"'",
+                      ",\n                header = ", input$colnames,", sep = '",input$valsep,"'",
                       ", quote = '",q,"', stringsAsFactors = FALSE)\n")
         rv$code <- paste0(head,cmd)
       }
@@ -193,15 +218,17 @@ Netreader <- function(){
       if(is.null(rv$g)){
         showNotification("please import a network first",type = "error",duration = 2)
       } else{
-        inFile <- input$attrfile
+        # inFile <- input$attrfile
+        inFile <- rv$pathA
         q <- ifelse(input$quotesA,"\"","")
-        A <- tryCatch(read.table(inFile$datapath,
+        A <- tryCatch(read.table(inFile,
                                  header = input$colnamesA,
                                  sep = input$valsepA,quote = q,
                                  stringsAsFactors = FALSE),
                       error=function(e) NULL)
         head <- "# load raw attribute data ----\n"
-        cmd <- paste0("attrs <- read.table(file = '",inFile$name,"'",", header = ", input$colnamesA,", sep = '",input$valsepA,"'",
+        cmd <- paste0("attrs <- read.table(file = '",inFile,"'",
+                      ",\n                    header = ", input$colnamesA,", sep = '",input$valsepA,"'",
                       ", quote = '",q,"', stringsAsFactors = FALSE)\n")
         rv$code <- paste0(rv$code,"\n",head,cmd)
 
@@ -247,7 +274,7 @@ Netreader <- function(){
     #done ----
     observeEvent(input$done, {
       if(input$text==""){
-        showNotification("Please enter a variable name",type="warning")
+        showNotification("Please enter a variable name",type="warning",duration = 2)
       }else{
         eval(parse(text = paste0("assign(\"",input$text,"\",rv$g",",envir = .GlobalEnv)")))
         invisible(stopApp())
