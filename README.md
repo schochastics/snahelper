@@ -1,13 +1,13 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
+# snahelper <img src="man/figures/logo.png" align="right"/>
+
 [![Lifecycle:
 maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/snahelper)](https://cran.r-project.org/package=snahelper)
 [![Downloads](https://cranlogs.r-pkg.org/badges/snahelper)](https://CRAN.R-project.org/package=snahelper)
-
-# snahelper
 
 `snahelper` provides a set RStudio Addin for social network analysis.
 The main addin is the `SNAhelper` which provides a simple GUI to do
@@ -26,7 +26,7 @@ importing data themselves.
 
 ## Quick example of SNAhelper
 
-![](figures/snahelper.gif)
+![](man/figures/snahelper.gif)
 
 Code to reproduce the used network.
 
@@ -59,18 +59,18 @@ g
 you to import raw data (edges and attributes). Make sure to specify file
 delimiters, etc. according to the shown preview.
 
-![](figures/Netreader1.png)
+![](man/figures/Netreader1.png)
 
 Using the `Netreader` should comes with a learning effect (hopefully).
 The last tab shows the R code to produce the network with the chosen
-data **without** using the Addin. ![](figures/Netreader2.png)
+data **without** using the Addin. ![](man/figures/Netreader2.png)
 
 The network will be saved in your global environment once you click
 “Done”.
 
 ## Quick example of Netbuilder
 
-![](figures/Netbuilder.gif)
+![](man/figures/Netbuilder.gif)
 
 ## Installation
 
@@ -108,7 +108,7 @@ an explanation. In the tweak section you can move individual nodes
 around. Choose the node from the dropdown menu and click on its new
 position in the plot.
 
-![](figures/layout.png)
+![](man/figures/layout.png)
 
 ### Node Attribute Manager
 
@@ -118,7 +118,7 @@ and clustering). The functions automatically choose the right version of
 indices, depending if the network is
 directed/weighted/undirected/unweighted.
 
-![](figures/NattributeMan.png)
+![](man/figures/NattributeMan.png)
 
 ### Nodes
 
@@ -126,14 +126,14 @@ This is where you can style your nodes. You can either do it manually,
 by choosing a color/size for all nodes together, or based on an
 attribute.
 
-![](figures/nodes.png)
+![](man/figures/nodes.png)
 
 ### Edge Attribute Manager
 
 Same as Node Attribute Manager but for edges. So far only shows existing
 edge attributes.
 
-![](figures/EattributeMan.png)
+![](man/figures/EattributeMan.png)
 
 ### Edges
 
@@ -143,7 +143,7 @@ other options are similar to the nodes tab. The snahelper automatically
 chooses the appropriate edge geom. If multiple edges are present, it
 uses `geom_edge_parallel0()`. Otherwise `geom_edge_link0()`.
 
-![](figures/edges.png)
+![](man/figures/edges.png)
 
 ### Result
 
@@ -152,4 +152,4 @@ with the results, hit the Done button and the R code to produce the plot
 is automatically inserted in your script. Or you can directly save the
 result as a png file.
 
-![](figures/result.png)
+![](man/figures/result.png)
