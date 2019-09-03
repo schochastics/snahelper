@@ -21,7 +21,6 @@ Imports: ggraph (>= 2.0.0),
     rstudioapi,
     ggplot2,
     shiny,
-    DT,
     colourpicker
 Depends:
     R (>= 3.0.0)
