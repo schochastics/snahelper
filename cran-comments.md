@@ -1,3 +1,12 @@
+# Update from 0.3.0 to 1.0.0
+
+Includes two more addins
+
+## Test environments
+
+* ubuntu 18.04, R 3.6.1
+* win-builder (devel and release)
+
 # Resubmission 2
 
 Deleted quotation marks around SNAhelperGadget and added "()".
