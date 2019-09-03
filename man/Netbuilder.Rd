@@ -11,7 +11,7 @@ NetbuilderAddin()
 \code{Netbuilder} returns the created network as igraph object.
 }
 \description{
-\code{Netbuilder} is a RStudio-Addin that allows you to create small networks.
+\code{Netbuilder} is an RStudio-Addin that allows you to create small networks with point and click.
 }
 \details{
 To run the addin, select \code{Netbuilder} from the Addins-menu within RStudio.

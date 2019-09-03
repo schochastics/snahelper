@@ -1,6 +1,6 @@
 #' Netreader
 #'
-#' \code{Netreader} is a RStudio-Addin that allows you to read network files.
+#' \code{Netreader} is an RStudio-Addin that allows you to read network files. So far, only plaintext files are supported (e.g. csv,tsv,...).
 #'
 #' @details To run the addin, select \code{Netreader} from the Addins-menu within RStudio.
 #' @return \code{Netreader} returns the created network as igraph object.

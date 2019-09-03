@@ -1,6 +1,6 @@
-# snahelper 0.4.0.9000
+# snahelper 1.0.0
 
-* **BREAKING** only works with the newest ggraph version (error message added)
+* **BREAKING** only works with the newest ggraph version (2.0.0) (error message added)
 * added `Netbuilder` addin
 * added `Netreader` addin
 * edge geom is chosen automatically between `geom_edge_link0()` and `geom_edge_parallel0()`
