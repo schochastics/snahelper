@@ -451,10 +451,18 @@ SNAhelper <- function(text){
     })
 
     #--------------------#
-    #calculate centrality/clustering if needed ----
+    #calculate centrality/clustering ----
     #--------------------#
     shiny::observeEvent(input$calcIndex, {
       attr_name <- gsub("\\(rv.*","",input$centindex)
+      if(igraph::is_directed(g) & attr_name=="degree"){
+        opt <- gsub("')","",gsub(".*mode='","",input$centindex))
+        attr_name <- paste0(opt,"-",attr_name)
+      }
+      if(igraph::is_directed(g) & attr_name=="graph.strength"){
+        opt <- gsub("')","",gsub(".*mode='","",input$centindex))
+        attr_name <- paste0(opt,"-",attr_name)
+      }
       if(!attr_name%in%igraph::vertex_attr_names(rv$g)){
         ind <- eval(parse(text=input$centindex))
 

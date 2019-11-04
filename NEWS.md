@@ -1,3 +1,7 @@
+# 1.0.1
+
+* Fixed a bug that prevented the calculation of in/out degree in directed networks  
+
 # snahelper 1.0.0
 
 * **BREAKING** only works with the newest ggraph version (2.0.0) (error message added)
