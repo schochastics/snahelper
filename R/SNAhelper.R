@@ -634,8 +634,7 @@ SNAhelper <- function(text){
                              ",edge_alpha = ",input$edgeAlphaMan,")")
         if(is.directed(g)){
           arrow_code <- paste0(",\narrow = arrow(angle = 30, length = unit(0.15, \"inches\")",
-                               ",\nends = \"last\", type = \"closed\")",
-                               ",\nend_cap = circle(",input$nodeSizeMan+2,", \"pt\"))")
+                               ",\nends = \"last\", type = \"closed\"))")
           code_edges <- gsub(")$",arrow_code,code_edges)
         }
 
@@ -646,8 +645,7 @@ SNAhelper <- function(text){
                                ",edge_alpha = ",input$edgeAlphaMan,")")
           if(is.directed(g)){
             arrow_code <- paste0(",\narrow = arrow(angle = 30, length = unit(0.15, \"inches\")",
-                                 ",\nends = \"last\", type = \"closed\")",
-                                 ",\nend_cap = circle(",input$nodeSizeMan+2,", \"pt\"))")
+                                 ",\nends = \"last\", type = \"closed\"))")
             code_edges <- gsub(")$",arrow_code,code_edges)
           }
           edge_scale_col <- paste0("scale_edge_colour_gradient(low = \"",input$edgeColAttrL,"\",",
@@ -661,8 +659,7 @@ SNAhelper <- function(text){
                                ",edge_alpha = ",input$edgeAlphaMan,")")
           if(is.directed(g)){
             arrow_code <- paste0(",\narrow = arrow(angle = 30, length = unit(0.15, \"inches\")",
-                                 ",\nends = \"last\", type = \"closed\")",
-                                 ",\nend_cap = circle(",input$nodeSizeMan+2,", \"pt\"))")
+                                 ",\nends = \"last\", type = \"closed\"))")
             code_edges <- gsub(")$",arrow_code,code_edges)
           }
           edge_scale_col <- paste0("scale_edge_colour_brewer(palette = \"",
@@ -676,8 +673,7 @@ SNAhelper <- function(text){
                              ",edge_alpha = ",input$edgeAlphaMan,")")
           if(is.directed(g)){
             arrow_code <- paste0(",\narrow = arrow(angle = 30, length = unit(0.15, \"inches\")",
-                                 ",\nends = \"last\", type = \"closed\")",
-                                 ",\nend_cap = circle(",input$nodeSizeMan+2,", \"pt\"))")
+                                 ",\nends = \"last\", type = \"closed\"))")
             code_edges <- gsub(")$",arrow_code,code_edges)
           }
           edge_scale_size <- paste0("scale_edge_width(",
@@ -691,8 +687,7 @@ SNAhelper <- function(text){
                              ",\nedge_width = ",input$edgeSizeMan,")")
         if(is.directed(g)){
           arrow_code <- paste0(",\narrow = arrow(angle = 30, length = unit(0.15, \"inches\")",
-                               ",\nends = \"last\", type = \"closed\")",
-                               ",\nend_cap = circle(",input$nodeSizeMan+2,", \"pt\"))")
+                               ",\nends = \"last\", type = \"closed\"))")
           code_edges <- gsub(")$",arrow_code,code_edges)
         }
         edge_scale_alpha <- paste0("scale_edge_alpha(",
@@ -706,8 +701,7 @@ SNAhelper <- function(text){
                              ",edge_alpha = ",input$edgeAlphaMan,")")
         if(is.directed(g)){
           arrow_code <- paste0(",\narrow = arrow(angle = 30, length = unit(0.15, \"inches\")",
-                               ",\nends = \"last\", type = \"closed\")",
-                               ",\nend_cap = circle(",input$nodeSizeMan+2,", \"pt\"))")
+                               ",\nends = \"last\", type = \"closed\"))")
           code_edges <- gsub(")$",arrow_code,code_edges)
         }
         edge_scale_size <- paste0("scale_edge_width(",
@@ -724,8 +718,7 @@ SNAhelper <- function(text){
                              ",edge_alpha = ",input$edgeAlphaMan,")")
         if(is.directed(g)){
           arrow_code <- paste0(",\narrow = arrow(angle = 30, length = unit(0.15, \"inches\")",
-                               ",\nends = \"last\", type = \"closed\")",
-                               ",\nend_cap = circle(",input$nodeSizeMan+2,", \"pt\"))")
+                               ",\nends = \"last\", type = \"closed\"))")
           code_edges <- gsub(")$",arrow_code,code_edges)
         }
         edge_scale_size <- paste0("scale_edge_width(",
@@ -742,8 +735,7 @@ SNAhelper <- function(text){
                              ",\nedge_width = ",input$edgeSizeMan,")")
         if(is.directed(g)){
           arrow_code <- paste0(",\narrow = arrow(angle = 30, length = unit(0.15, \"inches\")",
-                               ",\nends = \"last\", type = \"closed\")",
-                               ",\nend_cap = circle(",input$nodeSizeMan+2,", \"pt\"))")
+                               ",\nends = \"last\", type = \"closed\"))")
           code_edges <- gsub(")$",arrow_code,code_edges)
         }
         edge_scale_alpha <- paste0("scale_edge_alpha(",
@@ -760,8 +752,7 @@ SNAhelper <- function(text){
                              ",\nedge_width = ",input$edgeSizeMan,")")
         if(is.directed(g)){
           arrow_code <- paste0(",\narrow = arrow(angle = 30, length = unit(0.15, \"inches\")",
-                               ",\nends = \"last\", type = \"closed\")",
-                               ",\nend_cap = circle(",input$nodeSizeMan+2,", \"pt\"))")
+                               ",\nends = \"last\", type = \"closed\"))")
           code_edges <- gsub(")$",arrow_code,code_edges)
         }
         edge_scale_alpha <- paste0("scale_edge_alpha(",
@@ -778,8 +769,7 @@ SNAhelper <- function(text){
                              ",\nedge_colour = \"", input$edgeColMan,"\"",")")
         if(is.directed(g)){
           arrow_code <- paste0(",\narrow = arrow(angle = 30, length = unit(0.15, \"inches\")",
-                               ",\nends = \"last\", type = \"closed\")",
-                               ",\nend_cap = circle(",input$nodeSizeMan+2,", \"pt\"))")
+                               ",\nends = \"last\", type = \"closed\"))")
           code_edges <- gsub(")$",arrow_code,code_edges)
         }
         edge_scale_alpha <- paste0("scale_edge_alpha(",
@@ -796,8 +786,7 @@ SNAhelper <- function(text){
                              ",\ncolour = ",input$edgeColAttr,")",")")
         if(is.directed(g)){
           arrow_code <- paste0(",\narrow = arrow(angle = 30, length = unit(0.15, \"inches\")",
-                               ",\nends = \"last\", type = \"closed\")",
-                               ",\nend_cap = circle(",input$nodeSizeMan+2,", \"pt\"))")
+                               ",\nends = \"last\", type = \"closed\"))")
           code_edges <- gsub(")$",arrow_code,code_edges)
         }
         edge_scale_alpha <- paste0("scale_edge_alpha(",
@@ -816,8 +805,7 @@ SNAhelper <- function(text){
                              ",\ncolour = ",input$edgeColAttrD,")",")")
         if(is.directed(g)){
           arrow_code <- paste0(",\narrow = arrow(angle = 30, length = unit(0.15, \"inches\")",
-                               ",\nends = \"last\", type = \"closed\")",
-                               ",\nend_cap = circle(",input$nodeSizeMan+2,", \"pt\"))")
+                               ",\nends = \"last\", type = \"closed\"))")
           code_edges <- gsub(")$",arrow_code,code_edges)
         }
         edge_scale_alpha <- paste0("scale_edge_alpha(",

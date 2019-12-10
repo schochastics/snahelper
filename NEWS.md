@@ -1,6 +1,7 @@
-# 1.0.1
+# 1.0.1.9999
 
 * Fixed a bug that prevented the calculation of in/out degree in directed networks  
+* Fixed a bug that produced warnings for directed networks
 
 # snahelper 1.0.0
 
