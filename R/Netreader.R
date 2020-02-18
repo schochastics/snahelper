@@ -64,7 +64,7 @@ Netreader <- function(){
         hr(),
         fillRow(height = line.height, width = '100%',
               actionButton("readit","Import Network"),
-              textAreaInput("text",label = NA,value = "",placeholder = "enter name",height="35px")
+              textAreaInput("text",label = "",value = "",placeholder = "enter name",height="35px")
         ),
         fillRow(height = "120px", width = '100%',
                 verbatimTextOutput("netpreview")

@@ -2,6 +2,7 @@
 
 * Fixed a bug that prevented the calculation of in/out degree in directed networks  
 * Fixed a bug that produced warnings for directed networks
+* Fixed label of variable name field for `netbuilder` and `netreader`
 
 # snahelper 1.0.0
 

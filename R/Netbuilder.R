@@ -33,7 +33,7 @@ Netbuilder <- function(){
       actionButton("makeU","make undirected"),
       actionButton("makeD","make directed"),
       actionButton("clearG","clear"),
-      textAreaInput("text",label = NA,value = "",placeholder = "enter name",height="35px")
+      textAreaInput("text",label = "",value = "",placeholder = "enter name",height="35px")
     ),
     p(strong("Double Click:")," add vertex.",
       strong("Click on two nodes:")," add edge.",
