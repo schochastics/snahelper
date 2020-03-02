@@ -4,3 +4,6 @@
 ^\.Rproj\.user$
 figures/
 ^CRAN-RELEASE$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$

@@ -4,7 +4,7 @@
 # snahelper <img src="man/figures/logo.png" align="right"/>
 
 [![Lifecycle:
-maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
+stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://www.tidyverse.org/lifecycle/#stable)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/snahelper)](https://cran.r-project.org/package=snahelper)
 [![Downloads](https://cranlogs.r-pkg.org/badges/snahelper)](https://CRAN.R-project.org/package=snahelper)

@@ -1,0 +1,19 @@
+title: snahelper
+destination: ../pkgdown_sites/snahelper
+
+template:
+  params:
+    bootswatch: simplex
+
+navbar:
+  left:
+  - text: Reference
+    href: reference/index.html
+  - text: Tutorials
+    menu:
+    - text: Blog Post I
+      href: http://blog.schochastics.net/post/an-rstudio-addin-for-network-analysis-and-visualization/
+    - text: Blog Post II
+      href: http://blog.schochastics.net/post/new-rstudio-addins-for-network-analysis/
+  - text: Changelog
+    href: news/index.html
