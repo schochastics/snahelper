@@ -7,8 +7,6 @@ template:
 
 navbar:
   left:
-  - text: Reference
-    href: reference/index.html
   - text: Tutorials
     menu:
     - text: Blog Post I
@@ -17,3 +15,13 @@ navbar:
       href: http://blog.schochastics.net/post/new-rstudio-addins-for-network-analysis/
   - text: Changelog
     href: news/index.html
+    right:
+    - icon: fa-newspaper-o
+      text: "News"
+      href: news/index.html
+    - icon: fa-file-code-o
+      text: "Functions"
+      href: reference/index.html
+    - icon: fa-github fa-lg
+      text: "Github"
+      href: https://github.com/schochastics/snahelper
