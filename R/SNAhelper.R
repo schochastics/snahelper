@@ -51,9 +51,8 @@ SNAhelper <- function(text){
     gadgetTitleBar("SNA helper"),
     miniTabstripPanel(selected = 'layout',
                       miniTabPanel("layout", icon = icon('sliders'),
-                                   plotOutput("Graph1", width = '80%', height = '55%',click = "tweakxy"),
                                    miniContentPanel(
-                                     scrollable = TRUE,
+                                     scrollable = FALSE,
                                      fillRow(height = heading.height, width = '100%',
                                              headingOutput('Choose Layout')
                                      ),
@@ -84,15 +83,12 @@ SNAhelper <- function(text){
                                                             width = input.width),
                                              p("tweak node position by clicking on the desired location.")
                                      )
-                                   )
+                                   ),
+                                   plotOutput("Graph1", width = '80%', height = '55%',click = "tweakxy")
                       ),
                       miniTabPanel("node attributes",icon = icon("list-ol"),
                                    miniContentPanel(
-                                     scrollable = TRUE,
-                                     fillRow(height = heading.height, width = '100%',
-                                             headingOutput('Node Attributes')
-                                     ),
-                                     dataTableOutput("attrManageN"),
+                                     scrollable = FALSE,
                                      fillRow(height = line.height, width = '100%',
                                              selectizeInput('centindex', label = 'Index',
                                                             choices = NULL,
@@ -104,13 +100,16 @@ SNAhelper <- function(text){
                                      fillRow(height=line.height, width = '100%',
                                              actionButton("calcIndex","Calculate Index"),
                                              actionButton("calcClust","Calculate Clustering")
-                                     )
+                                     ),
+                                     fillRow(height = heading.height, width = '100%',
+                                             headingOutput('Node Attributes')
+                                     ),
+                                     DT::dataTableOutput("attrManageN")
                                    )
                       ),
                       miniTabPanel("nodes", icon = icon('circle'),
-                                   plotOutput("Graph2", width = '80%', height = '55%'),
                                    miniContentPanel(
-                                     scrollable = TRUE,
+                                     scrollable = FALSE,
                                      fillRow(height = heading.height, width = '100%',
                                              headingOutput('Manual')
                                      ),
@@ -169,21 +168,21 @@ SNAhelper <- function(text){
                                              )
 
                                      )
-                                   )
+                                   ),
+                                   plotOutput("Graph2", width = '80%', height = '55%')
                       ),
                       miniTabPanel("edge attributes",icon = icon("list-ol"),
                                    miniContentPanel(
-                                     scrollable = TRUE,
+                                     scrollable = FALSE,
                                      fillRow(height = heading.height, width = '100%',
                                              headingOutput('Edge Attributes')
                                      ),
-                                     dataTableOutput("attrManageE")
+                                     DT::dataTableOutput("attrManageE")
                                    )
                       ),
                       miniTabPanel("edges", icon = icon('minus'),
-                                   plotOutput("Graph3", width = '80%', height = '55%'),
                                    miniContentPanel(
-                                     scrollable = TRUE,
+                                     scrollable = FALSE,
                                      fillRow(height = heading.height, width = '100%',
                                              headingOutput('Manual')
                                      ),
@@ -236,7 +235,8 @@ SNAhelper <- function(text){
                                              )
 
                                      )
-                                   )
+                                   ),
+                                   plotOutput("Graph3", width = '80%', height = '55%')
                       ),
                       miniTabPanel("result", icon = icon('bezier-curve'),
                                    plotOutput("Graph4", width = '90%', height = '80%'),
@@ -863,14 +863,14 @@ SNAhelper <- function(text){
       }
     )
     #render Attribute Manager
-    dfattrN <- renderDataTable({
+    dfattrN <- DT::renderDataTable({
       DT_reactiveN()
     },options = list(
       lengthMenu = list(c(10, 20, -1), c('10', '20', 'All')),
       pageLength = 10,
       searching = FALSE))
 
-    dfattrE <- renderDataTable({
+    dfattrE <- DT::renderDataTable({
       DT_reactiveE()
     },options = list(
       lengthMenu = list(c(10, 20, -1), c('10', '20', 'All')),

@@ -1,3 +1,12 @@
+# Update from 1.0.0 to 1.1.0
+
+various bug fixes and QoL updates
+
+## Test environments
+
+* ubuntu 18.04, R 3.6.2
+* win-builder (devel and release)
+
 # Update from 0.3.0 to 1.0.0
 
 Includes two more addins

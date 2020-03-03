@@ -1,8 +1,10 @@
-# snahelper 1.0.1.9999
+# snahelper 1.1.0
 
 * Fixed a bug that prevented the calculation of in/out degree in directed networks  
 * Fixed a bug that produced warnings for directed networks
 * Fixed label of variable name field for `netbuilder` and `netreader`
+* Switched plot and control panel layout to remove scrolling issue. 
+* Use {{DT}} for table rendering due to persistent issue with character attributes.
 
 # snahelper 1.0.0
 
