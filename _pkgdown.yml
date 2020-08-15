@@ -1,7 +1,16 @@
 title: snahelper
 destination: ../pkgdown_sites/snahelper
-
+home:
+  title: Rstudio Addin for network analysis
+  description: A GUI for network analysis in R
 template:
+  opengraph:
+    image:
+      src: man/figures/logo.png
+      alt: "snahelper - Rstudio Addin for network analysis"
+    twitter:
+      creator: "@schochastics"
+      card: summary_large_image
   params:
     bootswatch: simplex
 
