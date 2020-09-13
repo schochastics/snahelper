@@ -12,3 +12,8 @@ Name: Netreader
 Description: Import raw network data
 Binding: NetreaderAddin
 Interactive: true
+
+Name: Componentlayouter
+Description: Layout network with several components
+Binding: ComponentlayouterAddin
+Interactive: true

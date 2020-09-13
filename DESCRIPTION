@@ -1,13 +1,13 @@
 Package: snahelper
 Type: Package
 Title: 'RStudio' Addin for Network Analysis and Visualization
-Version: 1.1.0
+Version: 1.2.0
 Authors@R: person("David", "Schoch", email = "david.schoch@manchester.ac.uk", role = c("aut", "cre"))
 Description: 'RStudio' addin which provides a GUI to visualize and analyse networks. 
     After finishing a session, the code to produce the plot is inserted in the current script.
     Alternatively, the function SNAhelperGadget() can be used directly from the console.
-    Additional addins include the Netreader() for reading network files and Netbuilder() to create
-    small networks via point and click.
+    Additional addins include the Netreader() for reading network files, Netbuilder() to create
+    small networks via point and click, and the Componentlayouter() to layout networks with many components manually.
 URL: https://github.com/schochastics/snahelper
 BugReports: https://github.com/schochastics/snahelper/issues
 License: MIT + file LICENSE
@@ -23,6 +23,7 @@ Imports: ggraph (>= 2.0.0),
     shiny,
     colourpicker,
     DT
+Suggests: ggforce
 Depends:
     R (>= 3.0.0)
-RoxygenNote: 6.1.1
+RoxygenNote: 7.1.0

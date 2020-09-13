@@ -24,7 +24,12 @@ data and combine them to an igraph object. The underlying code of the
 import procedure is shown at the end. This should help users to learn
 importing data themselves.
 
-## Quick example of SNAhelper
+The fourth addin `Componentlayouter` allows to layout networks with
+several components manually by placing them on an empty canvas.
+Components can also be rotated and resized. After finishing the session,
+the layout is saved as x and y vertex attributes.
+
+## Quick look at the SNAhelper
 
 ![](man/figures/snahelper.gif)
 
@@ -53,7 +58,7 @@ V(g)$colour <- ifelse(V(g)$display=="",NA,V(g)$display)
 g
 ```
 
-## Quick example of Netreader
+## Quick look at the Netreader
 
 `Netreader` should be pretty selfexplanatory. The first two tabs allow
 you to import raw data (edges and attributes). Make sure to specify file
@@ -68,9 +73,18 @@ data **without** using the Addin. ![](man/figures/Netreader2.png)
 The network will be saved in your global environment once you click
 “Done”.
 
-## Quick example of Netbuilder
+## Quick look at the Netbuilder
 
 ![](man/figures/Netbuilder.gif)
+
+## Quick look at the Componentlayouter
+
+![](man/figures/Componentlayouter.gif)
+
+Highlight an igraph object in your script and selcet the
+`Componentlayouter` from the RStudio addin menu. Components are added by
+clicking on the canvas and can be resized/rotated and re-positioned
+using the buttons at the bottom.
 
 ## Installation
 

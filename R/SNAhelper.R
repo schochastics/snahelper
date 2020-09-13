@@ -21,14 +21,10 @@ SNAhelper <- function(text){
   if (!requireNamespace("graphlayouts", quietly = TRUE)) {
     stop("graphlayouts package not found. Install it with install.packages('graphlayouts')", call. = FALSE)
   }
-  # if(utils::packageVersion("ggraph")<"1.0.2.9999"){
-  #   stop("snahelper needs a newer version of ggraph. please update it")
-  # }
-
   if (any(ls(envir = .GlobalEnv) == text)) {
     g <- get(text, envir = .GlobalEnv)
     if(!igraph::is.igraph(g)){
-      stop(paste0(text, 'is not an igraph object'))
+      stop(paste0(text, ' is not an igraph object'))
     }
     xy <- graphlayouts::layout_with_stress(g)
     rv <- reactiveValues(g=g,xy=xy)

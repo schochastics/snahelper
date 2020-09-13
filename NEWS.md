@@ -1,3 +1,7 @@
+# snahelper 1.2.0
+
+* added `componentlayouter`
+
 # snahelper 1.1.0
 
 * Fixed a bug that prevented the calculation of in/out degree in directed networks  
