@@ -26,7 +26,11 @@ SNAhelper <- function(text){
     if(!igraph::is.igraph(g)){
       stop(paste0(text, ' is not an igraph object'))
     }
-    xy <- graphlayouts::layout_with_stress(g)
+    if(any(igraph::vertex_attr_names(g)=="x") & any(igraph::vertex_attr_names(g)=="y")){
+      xy <- cbind(igraph::V(g)$x,igraph::V(g)$y)
+    } else{
+      xy <- graphlayouts::layout_with_stress(g)
+    }
     rv <- reactiveValues(g=g,xy=xy)
   } else {
     stop(paste0('Couldn\'t find  the graph ', text, '.'))

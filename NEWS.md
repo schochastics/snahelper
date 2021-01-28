@@ -1,3 +1,7 @@
+#snahelper 1.2.1.9999
+
+* added layout via stored node variables x and y 
+
 # snahelper 1.2.0
 
 * added `componentlayouter`
