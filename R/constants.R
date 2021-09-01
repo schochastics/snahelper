@@ -25,9 +25,9 @@ AttrNameImport <- paste0(
   "vnames <- get.vertex.attribute(g,'name')\n",
   "identCol <- which(apply(attrs,2,function(x) all(x%in%vnames)))[1]\n",
   "anames <- attrs[,identCol]\n",
-  "attrs <- attrs[,-identCol]\n",
+  "attrs <- attrs[,-identCol,drop = FALSE]\n",
   "perm <- match(vnames,anames)\n",
-  "for(attr in names(attr)){\n",
+  "for(attr in names(attrs)){\n",
     "   g <- set_vertex_attr(g,name = attr,value = attr[[attr]][perm])\n",
   "}\n"
 )

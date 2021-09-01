@@ -263,7 +263,7 @@ Netreader <- function(){
               vnames <- get.vertex.attribute(rv$g,"name")
               identCol <- which(apply(A,2,function(x) all(x%in%vnames)))[1]
               anames <- A[,identCol]
-              A <- A[,-identCol]
+              A <- A[,-identCol,drop = FALSE]
               perm <- match(vnames,anames)
               for(attr in names(A)){
                 rv$g <- set_vertex_attr(rv$g,name = attr,value = A[[attr]][perm])
