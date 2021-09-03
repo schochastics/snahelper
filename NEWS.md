@@ -1,7 +1,8 @@
-#snahelper 1.3.0.9999
+#snahelper 1.3.0
 
 * added layout via stored node variables x and y 
 * added `drop = FALSE` to `Netreader` for cases where only one attribute is read
+* minor bug fixes
 
 # snahelper 1.2.0
 
