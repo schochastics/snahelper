@@ -12,7 +12,6 @@ URL: https://github.com/schochastics/snahelper
 BugReports: https://github.com/schochastics/snahelper/issues
 License: MIT + file LICENSE
 Encoding: UTF-8
-LazyData: true
 Imports: ggraph (>= 2.0.0),
     graphlayouts (>= 0.5.0),
     igraph,

@@ -3,8 +3,6 @@
 
 # snahelper <img src="man/figures/logo.png" align="right"/>
 
-[![Lifecycle:
-stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://www.tidyverse.org/lifecycle/#stable)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/snahelper)](https://cran.r-project.org/package=snahelper)
 [![Downloads](https://cranlogs.r-pkg.org/badges/snahelper)](https://CRAN.R-project.org/package=snahelper)
@@ -84,7 +82,8 @@ The network will be saved in your global environment once you click
 Highlight an igraph object in your script and selcet the
 `Componentlayouter` from the RStudio addin menu. Components are added by
 clicking on the canvas and can be resized/rotated and re-positioned
-using the buttons at the bottom.
+using the buttons at the bottom. The final layout is stored as x and y
+coordinates in the igraph object.
 
 ## Installation
 
