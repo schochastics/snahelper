@@ -1,3 +1,13 @@
+# Update from 1.2.0 to 1.3.0
+
+mostly bug fixes and QoL 
+
+## Test environments
+
+* ubuntu 20.04, R 4.1.0
+* win-builder (devel and release)
+
+
 # Update from 1.1.0 to 1.2.0
 
 Includes a new RStudio addin
@@ -14,11 +24,6 @@ various bug fixes and QoL updates
 # Update from 0.3.0 to 1.0.0
 
 Includes two more addins
-
-## Test environments
-
-* ubuntu 18.04, R 3.6.1
-* win-builder (devel and release)
 
 # Resubmission 2
 
