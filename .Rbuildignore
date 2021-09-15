@@ -7,3 +7,4 @@ figures/
 ^_pkgdown\.yml$
 ^docs$
 ^pkgdown$
+^\.github$

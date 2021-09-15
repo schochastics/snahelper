@@ -3,6 +3,7 @@
 
 # snahelper <img src="man/figures/logo.png" align="right"/>
 
+[![R-CMD-check](https://github.com/schochastics/snahelper/workflows/R-CMD-check/badge.svg)](https://github.com/schochastics/snahelper/actions)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/snahelper)](https://cran.r-project.org/package=snahelper)
 [![Downloads](https://cranlogs.r-pkg.org/badges/snahelper)](https://CRAN.R-project.org/package=snahelper)
