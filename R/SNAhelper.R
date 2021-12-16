@@ -50,7 +50,7 @@ SNAhelper <- function(text){
 
     gadgetTitleBar("SNA helper"),
     miniTabstripPanel(selected = 'layout',
-                      miniTabPanel("layout", icon = icon('sliders'),
+                      miniTabPanel("layout", icon = icon('sliders-h'),
                                    miniContentPanel(
                                      scrollable = FALSE,
                                      fillRow(height = heading.height, width = '100%',
@@ -890,8 +890,15 @@ SNAhelper <- function(text){
       result <- gsub("ggraph\\(rv\\$g,",paste0("ggraph\\(",text,","),result)
       V(rv$g)$x <- rv$xy[,1]
       V(rv$g)$y <- rv$xy[,2]
-      result <- gsub("rv\\$xy\\[,1\\]",paste0("V(",text,")$x"),result)
-      result <- gsub("rv\\$xy\\[,2\\]",paste0("V(",text,")$y"),result)
+      result <- gsub("rv\\$xy\\[,1\\]","x",result)
+      result <- gsub("rv\\$xy\\[,2\\]","y",result)
+      # result <- gsub("rv\\$xy\\[,1\\]",paste0("V(",text,")$x"),result)
+      # result <- gsub("rv\\$xy\\[,2\\]",paste0("V(",text,")$y"),result)
+      #
+      result <- paste0("y <- ","c(",paste0(round(rv$xy[,2],4),collapse = ", "),")","\n\n",result)
+      result <- paste0("x <- ","c(",paste0(round(rv$xy[,1],4),collapse = ", "),")","\n",result)
+
+
       result <- formatR::tidy_source(text=result,output = FALSE)$text.tidy
       result <- gsub("\\+","\\+ \n\t",result)
       result <- gsub("\n\\s*\n","\n",result)

@@ -1,4 +1,9 @@
-#snahelper 1.3.0
+# snahelper 1.4.0
+
+* `Snahelper` is now more reproducible by also returning the coordinates explicitly (if needed)
+* fixed deprecated FA 5 sliders name (changed to sliders-h)
+
+# snahelper 1.3.0
 
 * added layout via stored node variables x and y 
 * added `drop = FALSE` to `Netreader` for cases where only one attribute is read
