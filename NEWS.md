@@ -1,6 +1,6 @@
 # snahelper 1.4.0
 
-* `Snahelper` is now more reproducible by also returning the coordinates explicitly (if needed)
+* `Snahelper` is now more reproducible by also returning the coordinates explicitly
 * fixed deprecated FA 5 sliders name (changed to sliders-h)
 
 # snahelper 1.3.0

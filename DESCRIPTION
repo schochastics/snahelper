@@ -2,7 +2,8 @@ Package: snahelper
 Type: Package
 Title: 'RStudio' Addin for Network Analysis and Visualization
 Version: 1.4.0
-Authors@R: person("David", "Schoch", email = "david.schoch@manchester.ac.uk", role = c("aut", "cre"))
+Authors@R: person("David", "Schoch", email = "david@schochastics.net", role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0003-2952-4812"))
 Description: 'RStudio' addin which provides a GUI to visualize and analyse networks. 
     After finishing a session, the code to produce the plot is inserted in the current script.
     Alternatively, the function SNAhelperGadget() can be used directly from the console.
