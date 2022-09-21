@@ -1,4 +1,4 @@
-# snahelper 1.4.0.9999
+# snahelper 1.4.1
 
 * fixed bug for directed degree
 

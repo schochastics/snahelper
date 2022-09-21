@@ -206,7 +206,7 @@ Netreader <- function(){
       } else{
         if(input$readfct=="adjacency matrix"){
           mode <- ifelse(input$directed,"directed","undirected")
-          g <- tryCatch(graph_from_adjacency_matrix(as.matrix(A),mode = mode),error=function(e) NULL)
+          g <- tryCatch(graph_from_adjacency_matrix(as.matrix(A),mode = mode,weighted = "weight"),error=function(e) NULL)
           if(is.null(g)){
             showNotification("something went wrong creating the network.",type = "error",duration = 2)
           } else{
