@@ -1,6 +1,7 @@
 # snahelper 1.4.1
 
-* fixed bug for directed degree
+* fixed bug for directed degree in snahelper
+* fixed weighted adjacency matrix bug in netreader
 
 # snahelper 1.4.0
 
