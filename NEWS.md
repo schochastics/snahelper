@@ -1,3 +1,7 @@
+# snahelper 1.4.0.9999
+
+* fixed bug for directed degree
+
 # snahelper 1.4.0
 
 * `Snahelper` is now more reproducible by also returning the coordinates explicitly
