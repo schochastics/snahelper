@@ -1,12 +1,12 @@
-# Update from 1.3.0 to 1.4.0
+# Update from 1.4.0 to 1.4.1
 
-- Email address of maintainer changed
-- Minor bugfixes and QoL
+This is a bugfix release
+
 
 
 ## Test environments
 
-* ubuntu 20.04, R 4.1.2
+* ubuntu 20.04, R 4.2.1
 * win-builder (devel and release)
 
 
