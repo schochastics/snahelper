@@ -9,7 +9,7 @@ Description: 'RStudio' addin which provides a GUI to visualize and analyse netwo
     Alternatively, the function SNAhelperGadget() can be used directly from the console.
     Additional addins include the Netreader() for reading network files, Netbuilder() to create
     small networks via point and click, and the Componentlayouter() to layout networks with many components manually.
-URL: https://github.com/schochastics/snahelper
+URL: https://github.com/schochastics/snahelper, https://schochastics.github.io/snahelper/
 BugReports: https://github.com/schochastics/snahelper/issues
 License: MIT + file LICENSE
 Encoding: UTF-8
