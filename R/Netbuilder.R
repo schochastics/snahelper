@@ -13,172 +13,175 @@
 #' @name Netbuilder
 NULL
 
-Netbuilder <- function(){
-  rv <- reactiveValues(g = igraph::graph.empty(n = 0,directed=FALSE),xy = matrix(0,0,2),
-                       start=-1,end=-1,el=matrix(0,0,2))
-#ui ----
-  ui <- miniPage(
-    tags$script(jscodeWidth),
-    tags$script(jscodeHeight),
-    tags$style(type = "text/css", ".selectize-dropdown{ width: 200px !important; }"),
-    tags$style(type = "text/css",".form-group.shiny-input-container{width:50%;}"),
-    tags$style(type = 'text/css', '#makeD {background-color: rgba(30,144,255,1); color: white}'),
-    tags$style(type = 'text/css', '#makeU {background-color: rgba(30,144,255,1); color: white}'),
-    tags$style(type = 'text/css', '#clearG {background-color: rgba(220,20,60,1); color: white}'),
+Netbuilder <- function() {
+    rv <- reactiveValues(
+        g = igraph::graph.empty(n = 0, directed = FALSE), xy = matrix(0, 0, 2),
+        start = -1, end = -1, el = matrix(0, 0, 2)
+    )
+    # ui ----
+    ui <- miniPage(
+        tags$script(jscodeWidth),
+        tags$script(jscodeHeight),
+        tags$style(type = "text/css", ".selectize-dropdown{ width: 200px !important; }"),
+        tags$style(type = "text/css", ".form-group.shiny-input-container{width:50%;}"),
+        tags$style(type = "text/css", "#makeD {background-color: rgba(30,144,255,1); color: white}"),
+        tags$style(type = "text/css", "#makeU {background-color: rgba(30,144,255,1); color: white}"),
+        tags$style(type = "text/css", "#clearG {background-color: rgba(220,20,60,1); color: white}"),
+        gadgetTitleBar("Netbuilder"),
+        plotOutput("Graph1", width = "80%", height = "80%", click = "add_edge", dblclick = "add_vertex"),
+        # hover = hoverOpts(id = "showXY",delay = 500,delayType = "throttle")),
+        fillRow(
+            height = line.height, width = "100%",
+            actionButton("makeU", "make undirected"),
+            actionButton("makeD", "make directed"),
+            actionButton("clearG", "clear"),
+            textAreaInput("text", label = "", value = "", placeholder = "enter name", height = "35px")
+        ),
+        p(
+            strong("Double Click:"), " add vertex.",
+            strong("Click on two nodes:"), " add edge.",
+            strong("Done:"), "Export graph to global enivronment with name from text input field"
+        )
+    )
 
-    gadgetTitleBar("Netbuilder"),
-    plotOutput("Graph1", width = '80%', height = '80%',click = "add_edge",dblclick = "add_vertex"),
-               # hover = hoverOpts(id = "showXY",delay = 500,delayType = "throttle")),
-    fillRow(height = line.height, width = '100%',
-      actionButton("makeU","make undirected"),
-      actionButton("makeD","make directed"),
-      actionButton("clearG","clear"),
-      textAreaInput("text",label = "",value = "",placeholder = "enter name",height="35px")
-    ),
-    p(strong("Double Click:")," add vertex.",
-      strong("Click on two nodes:")," add edge.",
-      strong("Done:"), "Export graph to global enivronment with name from text input field")
+    # server ----
+    server <- function(input, output, session) {
+        #--------------------#
+        # observe click ----
+        #--------------------#
+        shiny::observeEvent(input$add_edge, {
+            pts <- c(input$add_edge$x, input$add_edge$y)
+            g <- rv$g
+            xy <- rv$xy
+            start <- rv$start
+            end <- rv$end
+            closest_nID <- closest_node(pts, xy)
+            if (start == -1) {
+                start <- closest_nID
+                rv$start <- start
+            } else {
+                end <- closest_nID
+                if (end != -1) {
+                    g <- igraph::add.edges(g, c(start, end))
+                    rv$start <- -1
+                    rv$end <- -1
+                    rv$g <- g
+                    rv$el <- rbind(rv$el, c(start, end))
+                } else {
+                    g <- igraph::add.vertices(g, 1)
+                    rv$start <- -1
+                    rv$end <- -1
+                    xy <- rv$xy
+                    xy <- rbind(xy, pts)
+                    g <- igraph::add.edges(g, c(start, nrow(xy)))
+                    rv$xy <- xy
+                    rv$g <- g
+                    rv$el <- rbind(rv$el, c(start, nrow(xy)))
+                }
+            }
+            gg_reactive()
+        })
+        #--------------------#
+        # observe dbclick ----
+        #--------------------#
+        shiny::observeEvent(input$add_vertex, {
+            g <- rv$g
+            g <- igraph::add.vertices(g, 1)
+            rv$g <- g
+            xy <- rv$xy
+            xy <- rbind(xy, c(input$add_vertex$x, input$add_vertex$y))
+            rv$xy <- xy
+            rv$start <- -1
+            gg_reactive()
+        })
+        #--------------------#
+        # observe dbclick ----
+        #--------------------#
+        # output$coordXY <- renderPrint({
+        #   cat("Hover:\n")
+        #   str(input$showXY)
+        # })
+        #--------------------#
+        # make (un)directed ----
+        #--------------------#
+        shiny::observeEvent(input$makeD, {
+            if (igraph::ecount(rv$g) != 0) {
+                # el <- igraph::get.edgelist(rv$g)
+                el <- rv$el
+                g <- igraph::graph_from_edgelist(el, directed = TRUE)
+                rv$g <- g
+            }
+        })
+        shiny::observeEvent(input$makeU, {
+            if (igraph::ecount(rv$g) != 0) {
+                # el <- igraph::get.edgelist(rv$g)
+                el <- rv$el
+                g <- igraph::graph_from_edgelist(el, directed = FALSE)
+                rv$g <- g
+            }
+        })
 
-  )
+        shiny::observeEvent(input$clearG, {
+            g <- igraph::graph.empty(n = 0, directed = FALSE)
+            rv$g <- g
+            xy <- matrix(0, 0, 2)
+            rv$xy <- xy
+            rv$el <- xy
+        })
+        #-------------------#
+        # plot ----
+        #-------------------#
+        gg_reactive <- reactive({
+            code_layout <- "ggraph(rv$g,layout = \"manual\", x = rv$xy[,1], y = rv$xy[,2])"
+            code_nodes <- "geom_node_point(shape = 21,fill = \"grey25\",size=8)"
+            code_label <- "geom_node_text(label=1:nrow(rv$xy),size=6,col=\"white\")"
+            if (igraph::is.directed(rv$g)) {
+                code_arrow <- paste0(
+                    ",\narrow = arrow(angle = 25, length = unit(0.15, \"inches\")",
+                    ",\nends = \"last\", type = \"closed\")",
+                    ",\nend_cap = circle(", 8, ", \"pt\"))"
+                )
+                code_edges <- "geom_edge_link(edge_width=0.4,edge_colour=\"grey66\""
 
-#server ----
-  server <- function(input, output, session) {
-    #--------------------#
-    #observe click ----
-    #--------------------#
-    shiny::observeEvent(input$add_edge,{
-      pts <- c(input$add_edge$x,input$add_edge$y)
-      g <- rv$g
-      xy <- rv$xy
-      start <- rv$start
-      end <- rv$end
-      closest_nID <- closest_node(pts,xy)
-      if(start==-1){
-        start <- closest_nID
-        rv$start <- start
-      } else{
-        end <- closest_nID
-        if(end!=-1){
-          g <- igraph::add.edges(g,c(start,end))
-          rv$start <- -1
-          rv$end <- -1
-          rv$g <- g
-          rv$el <- rbind(rv$el,c(start,end))
-        } else{
-          g <- igraph::add.vertices(g,1)
-          rv$start <- -1
-          rv$end <- -1
-          xy <- rv$xy
-          xy <- rbind(xy,pts)
-          g <- igraph::add.edges(g,c(start,nrow(xy)))
-          rv$xy <- xy
-          rv$g <- g
-          rv$el <- rbind(rv$el,c(start,nrow(xy)))
-        }
-      }
-      gg_reactive()
+                code_edges <- paste0(code_edges, ", ", code_arrow)
+            } else {
+                code_edges <- "geom_edge_link0(edge_width=0.4,edge_colour=\"grey66\")"
+            }
+            code_theme <- "theme_graph(foreground=\"black\",border=TRUE)"
+            code_scale <- "scale_x_continuous(limits=c(0,10)) + scale_y_continuous(limits=c(0,10))"
+            code <- paste(code_layout, code_edges, code_nodes, code_label, code_theme, code_scale, sep = " + ")
+            p <- code
 
-    })
-    #--------------------#
-    #observe dbclick ----
-    #--------------------#
-    shiny::observeEvent(input$add_vertex,{
-      g <- rv$g
-      g <- igraph::add.vertices(g,1)
-      rv$g <- g
-      xy <- rv$xy
-      xy <- rbind(xy,c(input$add_vertex$x,input$add_vertex$y))
-      rv$xy <- xy
-      rv$start <- -1
-      gg_reactive()
+            return(p)
+        })
 
-    })
-    #--------------------#
-    #observe dbclick ----
-    #--------------------#
-    # output$coordXY <- renderPrint({
-    #   cat("Hover:\n")
-    #   str(input$showXY)
-    # })
-    #--------------------#
-    # make (un)directed ----
-    #--------------------#
-    shiny::observeEvent(input$makeD,{
-      if(igraph::ecount(rv$g)!=0){
-        # el <- igraph::get.edgelist(rv$g)
-        el <- rv$el
-        g <- igraph::graph_from_edgelist(el,directed = TRUE)
-        rv$g <- g
-      }
-    })
-    shiny::observeEvent(input$makeU,{
-      if(igraph::ecount(rv$g)!=0){
-        # el <- igraph::get.edgelist(rv$g)
-        el <- rv$el
-        g <- igraph::graph_from_edgelist(el,directed = FALSE)
-        rv$g <- g
-      }
-    })
+        # render plot
+        ggnet <- renderPlot({
+            eval(parse(text = gg_reactive()))
+        })
+        output$Graph1 <- ggnet
 
-    shiny::observeEvent(input$clearG,{
-        g <- graph.empty(n=0,directed = FALSE)
-        rv$g <- g
-        xy <- matrix(0,0,2)
-        rv$xy <- xy
-        rv$el <- xy
-    })
-    #-------------------#
-    # plot ----
-    #-------------------#
-    gg_reactive <- reactive({
-      code_layout <- "ggraph(rv$g,layout = \"manual\", x = rv$xy[,1], y = rv$xy[,2])"
-      code_nodes  <- "geom_node_point(shape = 21,fill = \"grey25\",size=8)"
-      code_label <- "geom_node_text(label=1:nrow(rv$xy),size=6,col=\"white\")"
-      if(igraph::is.directed(rv$g)){
-        code_arrow <- paste0(",\narrow = arrow(angle = 25, length = unit(0.15, \"inches\")",
-                                      ",\nends = \"last\", type = \"closed\")",
-                                      ",\nend_cap = circle(",8,", \"pt\"))")
-        code_edges  <- "geom_edge_link(edge_width=0.4,edge_colour=\"grey66\""
+        # cancel ----
+        observeEvent(input$cancel, {
+            invisible(stopApp())
+        })
 
-        code_edges <- paste0(code_edges,", ",code_arrow)
-      } else{
-        code_edges  <- "geom_edge_link0(edge_width=0.4,edge_colour=\"grey66\")"
-      }
-      code_theme  <- "theme_graph(foreground=\"black\",border=TRUE)"
-      code_scale <- "scale_x_continuous(limits=c(0,10)) + scale_y_continuous(limits=c(0,10))"
-      code <- paste(code_layout,code_edges,code_nodes,code_label,code_theme,code_scale,sep=" + ")
-      p <- code
-
-      return(p)
-    })
-
-    # render plot
-    ggnet <- renderPlot( {
-      eval(parse(text = gg_reactive()))
-    })
-    output$Graph1 <- ggnet
-
-    # cancel ----
-    observeEvent(input$cancel, {
-      invisible(stopApp())
-    })
-
-    #done ----
-    observeEvent(input$done, {
-      V(rv$g)$x <- rv$xy[,1]
-      V(rv$g)$y <- rv$xy[,2]
-      if(input$text==""){
-        showNotification("Please enter a variable name",type="warning")
-      }else{
-        eval(parse(text = paste0("assign(\"",input$text,"\",rv$g",",envir = .GlobalEnv)")))
-        invisible(stopApp())
-      }
-    })
-  }
+        # done ----
+        observeEvent(input$done, {
+            igraph::V(rv$g)$x <- rv$xy[, 1]
+            igraph::V(rv$g)$y <- rv$xy[, 2]
+            if (input$text == "") {
+                showNotification("Please enter a variable name", type = "warning")
+            } else {
+                eval(parse(text = paste0("assign(\"", input$text, "\",rv$g", ",envir = .GlobalEnv)")))
+                invisible(stopApp())
+            }
+        })
+    }
 
 
-  viewer <- dialogViewer(dialogName = 'Netbuilder', width = 990, height = 900)
-  runGadget(ui, server, stopOnCancel = FALSE, viewer = viewer)
+    viewer <- dialogViewer(dialogName = "Netbuilder", width = 990, height = 900)
+    runGadget(ui, server, stopOnCancel = FALSE, viewer = viewer)
 }
 
 
@@ -186,5 +189,5 @@ Netbuilder <- function(){
 #' @rdname Netbuilder
 
 NetbuilderAddin <- function() {
-  Netbuilder()
+    Netbuilder()
 }

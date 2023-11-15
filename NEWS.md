@@ -1,3 +1,7 @@
+# snahelper 1.4.2
+
+* partial code refactoring and new code style
+
 # snahelper 1.4.1
 
 * fixed bug for directed degree in snahelper
