@@ -1,0 +1,5 @@
+project:
+  title: snahelper
+  type: default
+  render:
+    - methodshub.qmd
