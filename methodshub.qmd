@@ -61,6 +61,14 @@ install.packages("snahelper")
 The package provides a GUI as a RStudi addin which allows to produce a network visualization (and an analysis) via dropdown menus.
 At the end of a session, the code to reproduce the results are returned for reproducibility.
 
+## Hardware Requirements
+
+Snahelper runs on any machine that can run R.
+
+## Technical Details
+
+Check the official [CRAN page](https://doi.org/10.32614/CRAN.package.snahelper) for further information.
+
 ## Contact Details
 
 Maintainer: David Schoch <david@schochastics.net>
