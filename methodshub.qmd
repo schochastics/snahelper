@@ -76,7 +76,7 @@ within the community.
 
 `snahelper` accepts `igraph` network objects.
 
-<!-- ## Output Data -->
+## Output Data
 <!--
 1. The output data section should illustrate the output data format by showing a (possibly abbreviated) example item and explaining (or linking to an explanation of) the data fields.
 2. The output data section should link to a small example output file in the same repository that can be re-created (as far as the method is non-random) from the input data (as described in the section "How to Use").
