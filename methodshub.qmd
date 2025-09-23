@@ -82,6 +82,9 @@ within the community.
 2. The output data section should link to a small example output file in the same repository that can be re-created (as far as the method is non-random) from the input data (as described in the section "How to Use").
 -->
 
+The functions within this R package produce different types of outputs.  
+To obtain help on the output formats for a function `foo()`, check the return value under `?foo`.
+
 ## Environment Setup
 <!--
 1. The environment setup section should list all requirements and provide all further steps to prepare an environment for running the method (installing requirements, downloading files, creating directoriees, etc.).
